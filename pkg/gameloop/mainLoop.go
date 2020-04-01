@@ -17,7 +17,7 @@ func Update(screen *ebiten.Image) error {
 		return nil
 	}
 
-	controls()
+	controls(gamestate.GetServerConnection())
 
 	tileCount := 0
 	for _, myTile := range gamestate.GetTileMap() {

@@ -1,13 +1,16 @@
 package gameloop
 
 import (
+	"net"
+
 	"github.com/hajimehoshi/ebiten"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
+	"github.com/jtheiss19/project-undying/pkg/mrp"
 )
 
-func controls() {
+func controls(conn net.Conn) {
 	if ebiten.IsKeyPressed(ebiten.KeySpace) {
-		gamestate.SpawnUnit()
+		myMRP := mrp.NewMRP([]byte("SPAWN"), []byte("test"), []byte("test"))
+		conn.Write(myMRP.MRPToByte())
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyA) {

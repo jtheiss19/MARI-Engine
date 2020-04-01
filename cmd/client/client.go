@@ -15,6 +15,7 @@ const (
 )
 
 func main() {
+
 	gamestate.Dial("localhost:8080")
 
 	if err := ebiten.Run(gameloop.Update, screenWidth/screenScale, screenHeight/screenScale, screenScale, "test"); err != nil {

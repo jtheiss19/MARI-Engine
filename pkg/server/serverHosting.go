@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
@@ -46,9 +47,43 @@ func session(ln net.Listener, newConnSignal chan string) {
 
 	go mrp.ReadMRPFromConn(conn, handleMRP)
 
+	sendTileMap(conn)
+
 	fmt.Println(<-closeConnection)
 }
 
 func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
+	for _, mrpItem := range newMRPList {
+		switch mrpItem.GetRequest() {
+		case "SPAWN":
+			gamestate.SpawnUnit()
 
+		case "UNIT":
+			sendUnitMap(conn)
+		}
+	}
+}
+
+func sendTileMap(conn net.Conn) {
+	myMap := gamestate.GetTileMap()
+
+	bytes, _ := json.Marshal(myMap)
+
+	myMRP := mrp.NewMRP([]byte("TILE"), bytes, []byte("test"))
+
+	conn.Write(myMRP.MRPToByte())
+}
+
+func sendUnitMap(conn net.Conn) {
+	myMap := gamestate.GetUnitMap()
+
+	bytes, _ := json.Marshal(myMap)
+
+	myMRP := mrp.NewMRP([]byte("UNIT"), bytes, []byte("test"))
+
+	conn.Write(myMRP.MRPToByte())
+
+	myMRP = mrp.NewMRP([]byte("END"), []byte("test"), []byte("test"))
+
+	conn.Write(myMRP.MRPToByte())
 }
