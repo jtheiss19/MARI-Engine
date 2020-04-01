@@ -33,7 +33,7 @@ func NewWater(xPos float64, yPos float64) *Water {
 	return &Water{x: xPos, y: yPos}
 }
 
-func (s *Water) Draw(screen *ebiten.Image) {
+func (s *Water) Draw(screen *ebiten.Image, xOffset float64, yOffset float64) {
 	w, h := masterTexture.Size()
 
 	op := &ebiten.DrawImageOptions{}
@@ -42,6 +42,11 @@ func (s *Water) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 	op.GeoM.Translate(float64(w)/2, float64(h)/2)
 	op.GeoM.Translate(s.x, s.y)
+	op.GeoM.Translate(xOffset, yOffset)
 
 	screen.DrawImage(masterTexture, op)
+}
+
+func (s *Water) GetPos() (float64, float64) {
+	return s.x, s.y
 }

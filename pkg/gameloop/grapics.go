@@ -3,10 +3,14 @@ package gameloop
 import (
 	"fmt"
 
+	"github.com/jtheiss19/project-undying/pkg/player"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
+
+var PlrView *player.PlrView = player.NewPlrView()
 
 func Update(screen *ebiten.Image) error {
 	if ebiten.IsDrawingSkipped() {
@@ -15,16 +19,27 @@ func Update(screen *ebiten.Image) error {
 
 	controls()
 
+	tileCount := 0
 	for _, myTile := range gamestate.GetTileMap() {
-		myTile.Draw(screen)
+		x, y := myTile.GetPos()
+		if PlrView.CanView(x, y) {
+			x, y := PlrView.GetPos()
+			myTile.Draw(screen, -x, -y)
+			tileCount++
+		}
 	}
 
 	for _, myUnit := range gamestate.GetUnitMap() {
 		myUnit.Update()
-		myUnit.Draw(screen)
+		x, y := myUnit.GetPos()
+		if PlrView.CanView(x, y) {
+			x, y := PlrView.GetPos()
+			myUnit.Draw(screen, -x, -y)
+			tileCount++
+		}
 	}
 
-	msg := fmt.Sprintf("TPS: %0.2f \nFPS: %0.2f \nNumber of Ships: %d", ebiten.CurrentTPS(), ebiten.CurrentFPS(), len(gamestate.GetUnitMap()))
+	msg := fmt.Sprintf(" TPS: %0.2f \n FPS: %0.2f \n Number of Things Drawn: %d", ebiten.CurrentTPS(), ebiten.CurrentFPS(), tileCount)
 	ebitenutil.DebugPrint(screen, msg)
 
 	return nil
