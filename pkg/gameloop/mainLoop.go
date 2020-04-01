@@ -21,8 +21,7 @@ func Update(screen *ebiten.Image) error {
 
 	tileCount := 0
 	for _, myTile := range gamestate.GetTileMap() {
-		x, y := myTile.GetPos()
-		if PlrView.CanView(x, y) {
+		if PlrView.CanView(myTile.GetPos()) {
 			x, y := PlrView.GetPos()
 			myTile.Draw(screen, -x, -y)
 			tileCount++
@@ -31,8 +30,7 @@ func Update(screen *ebiten.Image) error {
 
 	for _, myUnit := range gamestate.GetUnitMap() {
 		myUnit.Update()
-		x, y := myUnit.GetPos()
-		if PlrView.CanView(x, y) {
+		if PlrView.CanView(myUnit.GetPos()) {
 			x, y := PlrView.GetPos()
 			myUnit.Draw(screen, -x, -y)
 			tileCount++
