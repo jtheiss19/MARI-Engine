@@ -39,22 +39,6 @@ func Update(screen *ebiten.Image) error {
 		}
 	}
 
-	for _, elem := range elementList {
-		if elem.Active {
-			err := elem.Update()
-			if err != nil {
-				fmt.Println("updating element:", err)
-				return nil
-			}
-			err = elem.Draw(screen)
-			if err != nil {
-				fmt.Println("drawing element:", elem)
-				return nil
-			}
-			tileCount++
-		}
-	}
-
 	msg := fmt.Sprintf(" TPS: %0.2f \n FPS: %0.2f \n Number of Things Drawn: %d", ebiten.CurrentTPS(), ebiten.CurrentFPS(), tileCount)
 	ebitenutil.DebugPrint(screen, msg)
 

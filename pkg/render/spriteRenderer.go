@@ -10,7 +10,7 @@ import (
 )
 
 type SpriteRenderer struct {
-	Container *elements.Element
+	container *elements.Element
 	Tex       *ebiten.Image
 
 	Width, Height float64
@@ -26,7 +26,7 @@ func NewSpriteRenderer(container *elements.Element, filename string, masterTex *
 	width, height := tex.Size()
 
 	return &SpriteRenderer{
-		Container: container,
+		container: container,
 		Tex:       tex,
 		Width:     float64(width),
 		Height:    float64(height),
@@ -38,9 +38,9 @@ func (sr *SpriteRenderer) OnDraw(screen *ebiten.Image) error {
 	op.GeoM.Reset()
 
 	op.GeoM.Translate(-float64(sr.Width)/2, -float64(sr.Height)/2)
-	op.GeoM.Rotate(1 * math.Pi * sr.Container.Rotation / 360)
+	op.GeoM.Rotate(1 * math.Pi * sr.container.Rotation / 360)
 	op.GeoM.Translate(float64(sr.Width)/2, float64(sr.Height)/2)
-	op.GeoM.Translate(sr.Container.XPos, sr.Container.YPos)
+	op.GeoM.Translate(sr.container.XPos, sr.container.YPos)
 	//op.GeoM.Translate(xOffset, yOffset)
 
 	screen.DrawImage(sr.Tex, op)

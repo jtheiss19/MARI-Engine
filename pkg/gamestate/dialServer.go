@@ -1,9 +1,14 @@
 package gamestate
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net"
 
+	"github.com/jtheiss19/project-undying/pkg/tiles"
+
+	"github.com/jtheiss19/project-undying/pkg/elements"
 	"github.com/jtheiss19/project-undying/pkg/mrp"
 )
 
@@ -22,31 +27,23 @@ func Dial(address string) {
 
 func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 	for _, mrpItem := range newMRPList {
-		switch mrpItem.GetRequest() { /*
-			case "TILE":
-				json.Unmarshal([]byte(mrpItem.GetBody()), &myTileMap)
-				UpdateGamestateFromServer()
+		switch mrpItem.GetRequest() {
+		case "ELEM":
+			var tempElem elements.Element
+			var finalElem *elements.Element
+			json.Unmarshal([]byte(mrpItem.GetBody()), &tempElem)
 
-			case "UNIT":
-				var unitAdded units.IsUnit
-				var myUnit *units.Unit
-				err := json.Unmarshal([]byte(mrpItem.GetBody()), &myUnit)
-				if err != nil {
-					log.Fatal(err)
-				}
+			switch tempElem.Type {
+			case "water":
+				finalElem = tiles.NewWater(tempElem.XPos, tempElem.YPos)
+			default:
+				fmt.Println("No Match Found for Tile Data Type:", tempElem.Type)
+			}
+			elementListTemp = append(elementListTemp, finalElem)
+		case "END":
+			PushElemMap()
 
-				switch myUnit.GetType() {
-				case "destroyer":
-					unitAdded = units.NewDestroyer(myUnit, "")
-				default:
-					unitAdded = myUnit
-				}
-				myUnitMapTemp = append(myUnitMapTemp, unitAdded)
-
-			case "END":
-				PushUnitMap()
-
-				UpdateGamestateFromServer()*/
+			UpdateGamestateFromServer()
 		}
 	}
 }

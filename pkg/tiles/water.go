@@ -15,6 +15,7 @@ func NewWater(xpos float64, ypos float64) *elements.Element {
 	water.YPos = ypos
 
 	water.Active = true
+	water.Type = "water"
 
 	sr := render.NewSpriteRenderer(water, "water.png", waterTexture)
 	water.AddComponent(sr)

@@ -17,6 +17,7 @@ type Element struct {
 	YPos       float64
 	Rotation   float64
 	Active     bool
+	Type       string
 	Components []Component
 }
 
