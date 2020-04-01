@@ -14,10 +14,6 @@ func Dial(address string) {
 	}
 
 	go mrp.ReadMRPFromConn(conn, handleMRP)
-
-	myMRP := mrp.NewMRP([]byte("test"), []byte("test"), []byte("test"))
-
-	conn.Write(myMRP.MRPToByte())
 }
 
 func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
