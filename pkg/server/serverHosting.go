@@ -1,18 +1,12 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/mrp"
 )
-
-func init() {
-	gamestate.NewMap()
-}
 
 var connectionList = make(map[int]net.Conn)
 
@@ -60,9 +54,6 @@ func session(ln net.Listener, newConnSignal chan string, sessionID int) {
 func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 	for _, mrpItem := range newMRPList {
 		switch mrpItem.GetRequest() {
-		case "SPAWN":
-			gamestate.SpawnUnit("0")
-
 		case "UNIT":
 			sendUnitMap(conn)
 		}
@@ -70,27 +61,27 @@ func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 }
 
 func sendTileMap(conn net.Conn) {
-	myMap := gamestate.GetTileMap()
+	//myMap := gamestate.GetTileMap()
 
-	bytes, _ := json.Marshal(myMap)
+	//bytes, _ := json.Marshal(myMap)
 
-	myMRP := mrp.NewMRP([]byte("TILE"), bytes, []byte("test"))
+	//myMRP := mrp.NewMRP([]byte("TILE"), bytes, []byte("test"))
 
-	conn.Write(myMRP.MRPToByte())
+	//conn.Write(myMRP.MRPToByte())
 }
 
 func sendUnitMap(conn net.Conn) {
-	myMap := gamestate.GetUnitMap()
+	//myMap := gamestate.GetUnitMap()
 
-	for _, myUnit := range myMap {
-		bytes, _ := json.Marshal(myUnit)
+	//for _, myUnit := range myMap {
+	//	bytes, _ := json.Marshal(myUnit)
+	//
+	//	myMRP := mrp.NewMRP([]byte("UNIT"), bytes, []byte("test"))
 
-		myMRP := mrp.NewMRP([]byte("UNIT"), bytes, []byte("test"))
+	//	conn.Write(myMRP.MRPToByte())
+	//}
 
-		conn.Write(myMRP.MRPToByte())
-	}
+	//myMRP := mrp.NewMRP([]byte("END"), []byte("test"), []byte("test"))
 
-	myMRP := mrp.NewMRP([]byte("END"), []byte("test"), []byte("test"))
-
-	conn.Write(myMRP.MRPToByte())
+	//conn.Write(myMRP.MRPToByte())
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/gameloop"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
 
 const (
@@ -16,7 +15,8 @@ const (
 
 func main() {
 
-	gamestate.Dial("localhost:8080")
+	//gamestate.Dial("localhost:8080")
+	//gamestate.NewWorld()
 
 	if err := ebiten.Run(gameloop.Update, screenWidth/screenScale, screenHeight/screenScale, screenScale, "test"); err != nil {
 		log.Fatal(err)

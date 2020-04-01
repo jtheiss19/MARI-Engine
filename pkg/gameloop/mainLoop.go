@@ -3,36 +3,54 @@ package gameloop
 import (
 	"fmt"
 
-	"github.com/jtheiss19/project-undying/pkg/player"
-
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/jtheiss19/project-undying/pkg/elements"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
+	"github.com/jtheiss19/project-undying/pkg/player"
 )
 
-var PlrView *player.PlrView = player.NewPlrView()
+var elementList []*elements.Element
+
+func init() {
+	elementList = append(elementList, player.NewPlayer())
+}
 
 func Update(screen *ebiten.Image) error {
 	if ebiten.IsDrawingSkipped() {
 		return nil
 	}
 
-	controls(gamestate.GetServerConnection())
-
 	tileCount := 0
-	for _, myTile := range gamestate.GetTileMap() {
-		if PlrView.CanView(myTile.GetPos()) {
-			x, y := PlrView.GetPos()
-			myTile.Draw(screen, -x, -y)
+
+	for _, elem := range gamestate.GetWorld() {
+		if elem.Active {
+			err := elem.Update()
+			if err != nil {
+				fmt.Println("updating element:", err)
+				return nil
+			}
+			err = elem.Draw(screen)
+			if err != nil {
+				fmt.Println("drawing element:", elem)
+				return nil
+			}
 			tileCount++
 		}
 	}
 
-	for _, myUnit := range gamestate.GetUnitMap() {
-		myUnit.Update()
-		if PlrView.CanView(myUnit.GetPos()) {
-			x, y := PlrView.GetPos()
-			myUnit.Draw(screen, -x, -y)
+	for _, elem := range elementList {
+		if elem.Active {
+			err := elem.Update()
+			if err != nil {
+				fmt.Println("updating element:", err)
+				return nil
+			}
+			err = elem.Draw(screen)
+			if err != nil {
+				fmt.Println("drawing element:", elem)
+				return nil
+			}
 			tileCount++
 		}
 	}

@@ -1,12 +1,10 @@
 package gamestate
 
 import (
-	"encoding/json"
 	"log"
 	"net"
 
 	"github.com/jtheiss19/project-undying/pkg/mrp"
-	"github.com/jtheiss19/project-undying/pkg/units"
 )
 
 var serverConnection net.Conn
@@ -24,31 +22,31 @@ func Dial(address string) {
 
 func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 	for _, mrpItem := range newMRPList {
-		switch mrpItem.GetRequest() {
-		case "TILE":
-			json.Unmarshal([]byte(mrpItem.GetBody()), &myTileMap)
-			UpdateGamestateFromServer()
+		switch mrpItem.GetRequest() { /*
+			case "TILE":
+				json.Unmarshal([]byte(mrpItem.GetBody()), &myTileMap)
+				UpdateGamestateFromServer()
 
-		case "UNIT":
-			var unitAdded units.IsUnit
-			var myUnit *units.Unit
-			err := json.Unmarshal([]byte(mrpItem.GetBody()), &myUnit)
-			if err != nil {
-				log.Fatal(err)
-			}
+			case "UNIT":
+				var unitAdded units.IsUnit
+				var myUnit *units.Unit
+				err := json.Unmarshal([]byte(mrpItem.GetBody()), &myUnit)
+				if err != nil {
+					log.Fatal(err)
+				}
 
-			switch myUnit.GetType() {
-			case "destroyer":
-				unitAdded = units.NewDestroyer(myUnit, "")
-			default:
-				unitAdded = myUnit
-			}
-			myUnitMapTemp = append(myUnitMapTemp, unitAdded)
+				switch myUnit.GetType() {
+				case "destroyer":
+					unitAdded = units.NewDestroyer(myUnit, "")
+				default:
+					unitAdded = myUnit
+				}
+				myUnitMapTemp = append(myUnitMapTemp, unitAdded)
 
-		case "END":
-			PushUnitMap()
+			case "END":
+				PushUnitMap()
 
-			UpdateGamestateFromServer()
+				UpdateGamestateFromServer()*/
 		}
 	}
 }

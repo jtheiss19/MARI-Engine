@@ -1,52 +1,25 @@
 package tiles
 
 import (
-	"log"
-
 	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/project-undying/pkg/render"
 )
 
-var masterTexture *ebiten.Image
+var waterTexture *ebiten.Image
 
-type Water struct {
-	X    float64
-	Y    float64
-	Type string
-}
+func NewWater(xpos float64, ypos float64) *elements.Element {
+	water := &elements.Element{}
 
-func init() {
-	origEbitenImage, _, err := ebitenutil.NewImageFromFile("../../assets/sprites/water.png", ebiten.FilterDefault)
-	if err != nil {
-		log.Fatal(err)
-	}
+	water.XPos = xpos
+	water.YPos = ypos
 
-	w, h := origEbitenImage.Size()
-	masterTexture, _ = ebiten.NewImage(w, h, ebiten.FilterDefault)
+	water.Active = true
 
-	op := &ebiten.DrawImageOptions{}
+	sr := render.NewSpriteRenderer(water, "water.png", waterTexture)
+	water.AddComponent(sr)
 
-	masterTexture.DrawImage(origEbitenImage, op)
-}
+	waterTexture = sr.Tex
 
-func NewWater(xPos float64, yPos float64) *Water {
-	return &Water{X: xPos, Y: yPos, Type: "water"}
-}
-
-func (s *Water) Draw(screen *ebiten.Image, xOffset float64, yOffset float64) {
-	w, h := masterTexture.Size()
-
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Reset()
-
-	op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
-	op.GeoM.Translate(float64(w)/2, float64(h)/2)
-	op.GeoM.Translate(s.X, s.Y)
-	op.GeoM.Translate(xOffset, yOffset)
-
-	screen.DrawImage(masterTexture, op)
-}
-
-func (s *Water) GetPos() (float64, float64) {
-	return s.X, s.Y
+	return water
 }
