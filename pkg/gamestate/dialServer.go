@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/jtheiss19/project-undying/pkg/mrp"
+	"github.com/jtheiss19/project-undying/pkg/units"
 )
 
 var serverConnection net.Conn
@@ -29,9 +30,24 @@ func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 			UpdateGamestateFromServer()
 
 		case "UNIT":
-			json.Unmarshal([]byte(mrpItem.GetBody()), &myUnitMap)
+			var unitAdded units.IsUnit
+			var myUnit *units.Unit
+			err := json.Unmarshal([]byte(mrpItem.GetBody()), &myUnit)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			switch myUnit.GetType() {
+			case "destroyer":
+				unitAdded = units.NewDestroyer(myUnit, "")
+			default:
+				unitAdded = myUnit
+			}
+			myUnitMapTemp = append(myUnitMapTemp, unitAdded)
 
 		case "END":
+			PushUnitMap()
+
 			UpdateGamestateFromServer()
 		}
 	}

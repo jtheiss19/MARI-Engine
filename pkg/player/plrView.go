@@ -9,7 +9,7 @@ type PlrView struct {
 }
 
 func NewPlrView() *PlrView {
-	return &PlrView{xPos: 0, yPos: 0, speed: 1, width: 1280 / 2, height: 720 / 2}
+	return &PlrView{xPos: 0, yPos: 0, speed: 1, width: 1280, height: 720}
 }
 
 func (s *PlrView) MovePlrViewBy(newX float64, newY float64) {

@@ -1,14 +1,22 @@
 package gamestate
 
-import "github.com/jtheiss19/project-undying/pkg/units"
+import (
+	"github.com/jtheiss19/project-undying/pkg/units"
+)
 
-var myUnitMap []*units.Destroyer
+var myUnitMap []units.IsUnit
+var myUnitMapTemp []units.IsUnit
 
-func GetUnitMap() []*units.Destroyer {
+func GetUnitMap() []units.IsUnit {
 	return myUnitMap
 }
 
-func SpawnUnit() {
-	myDestroyer := units.NewDestroyer()
+func SpawnUnit(owner string) {
+	myDestroyer := units.NewDestroyer(nil, owner)
 	myUnitMap = append(myUnitMap, myDestroyer)
+}
+
+func PushUnitMap() {
+	myUnitMap = myUnitMapTemp
+	myUnitMapTemp = []units.IsUnit{}
 }

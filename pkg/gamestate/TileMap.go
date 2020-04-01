@@ -11,8 +11,8 @@ func GetTileMap() []*tiles.Water {
 }
 
 func NewMap() {
-	for x := 0; x < 10; x++ {
-		for y := 0; y < 10; y++ {
+	for x := 0; x < 100; x++ {
+		for y := 0; y < 100; y++ {
 			myWater := tiles.NewWater(float64(x*64), float64(y*64))
 			myTileMap = append(myTileMap, myWater)
 		}

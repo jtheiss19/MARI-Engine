@@ -11,13 +11,11 @@ import (
 var masterTexture *ebiten.Image
 
 type Destroyer struct {
-	X float64
-	Y float64
-	V float64
+	Unit
 }
 
 func init() {
-	origEbitenImage, _, err := ebitenutil.NewImageFromFile("../../assets/sprites/dest1.png", ebiten.FilterDefault)
+	origEbitenImage, _, err := ebitenutil.NewImageFromFile("../../assets/sprites/destroyer.png", ebiten.FilterDefault)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,8 +28,15 @@ func init() {
 	masterTexture.DrawImage(origEbitenImage, op)
 }
 
-func NewDestroyer() *Destroyer {
-	return &Destroyer{X: 0, Y: 0, V: .1}
+func NewDestroyer(unitInfo *Unit, owner string) *Destroyer {
+	myDestroyer := &Destroyer{}
+	if unitInfo == nil {
+		myDestroyer.Unit = *NewUnit("destroyer", owner)
+	} else {
+		myDestroyer.Unit = *unitInfo
+	}
+
+	return myDestroyer
 }
 
 func (s *Destroyer) Draw(screen *ebiten.Image, xOffset float64, yOffset float64) {
@@ -47,13 +52,4 @@ func (s *Destroyer) Draw(screen *ebiten.Image, xOffset float64, yOffset float64)
 	op.GeoM.Translate(xOffset, yOffset)
 
 	screen.DrawImage(masterTexture, op)
-}
-
-func (s *Destroyer) Update() {
-	s.X += s.V
-	s.Y += s.V
-}
-
-func (s *Destroyer) GetPos() (float64, float64) {
-	return s.X, s.Y
 }

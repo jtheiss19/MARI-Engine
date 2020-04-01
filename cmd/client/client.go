@@ -11,7 +11,7 @@ import (
 const (
 	screenWidth  = 1280
 	screenHeight = 720
-	screenScale  = 2
+	screenScale  = 1
 )
 
 func main() {

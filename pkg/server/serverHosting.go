@@ -14,6 +14,8 @@ func init() {
 	gamestate.NewMap()
 }
 
+var connectionList = make(map[int]net.Conn)
+
 //Server starts a server on the selected port and acts
 //as the main entrance into the server package.
 func Server(port string) {
@@ -28,13 +30,15 @@ func Server(port string) {
 
 	newConnSignal := make(chan string)
 
+	connections := 0
 	for {
-		go session(server, newConnSignal)
+		go session(server, newConnSignal, connections)
 		fmt.Println(<-newConnSignal)
+		connections++
 	}
 }
 
-func session(ln net.Listener, newConnSignal chan string) {
+func session(ln net.Listener, newConnSignal chan string, sessionID int) {
 	conn, err := ln.Accept()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -43,12 +47,13 @@ func session(ln net.Listener, newConnSignal chan string) {
 
 	newConnSignal <- "New Connection Made"
 
-	closeConnection := make(chan string)
+	connectionList[sessionID] = conn
 
 	go mrp.ReadMRPFromConn(conn, handleMRP)
 
 	sendTileMap(conn)
 
+	closeConnection := make(chan string)
 	fmt.Println(<-closeConnection)
 }
 
@@ -56,7 +61,7 @@ func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 	for _, mrpItem := range newMRPList {
 		switch mrpItem.GetRequest() {
 		case "SPAWN":
-			gamestate.SpawnUnit()
+			gamestate.SpawnUnit("0")
 
 		case "UNIT":
 			sendUnitMap(conn)
@@ -77,13 +82,15 @@ func sendTileMap(conn net.Conn) {
 func sendUnitMap(conn net.Conn) {
 	myMap := gamestate.GetUnitMap()
 
-	bytes, _ := json.Marshal(myMap)
+	for _, myUnit := range myMap {
+		bytes, _ := json.Marshal(myUnit)
 
-	myMRP := mrp.NewMRP([]byte("UNIT"), bytes, []byte("test"))
+		myMRP := mrp.NewMRP([]byte("UNIT"), bytes, []byte("test"))
 
-	conn.Write(myMRP.MRPToByte())
+		conn.Write(myMRP.MRPToByte())
+	}
 
-	myMRP = mrp.NewMRP([]byte("END"), []byte("test"), []byte("test"))
+	myMRP := mrp.NewMRP([]byte("END"), []byte("test"), []byte("test"))
 
 	conn.Write(myMRP.MRPToByte())
 }
