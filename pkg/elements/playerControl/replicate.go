@@ -2,7 +2,6 @@ package playerControl
 
 import (
 	"encoding/json"
-	"fmt"
 	"net"
 
 	"github.com/hajimehoshi/ebiten"
@@ -43,7 +42,6 @@ func (replic *Replicator) OnUpdate() error {
 		bytes, _ := json.Marshal(replic.container)
 		myMRP := mrp.NewMRP([]byte("REPLIC"), []byte(bytes), []byte(replic.container.ID))
 		replic.conn.Write(myMRP.MRPToByte())
-		fmt.Println("here")
 	}
 	return nil
 }

@@ -110,6 +110,12 @@ func handleELEMCreates(bytesMaster []byte, finalElem *elements.Element) {
 			json.Unmarshal(bytes, &myComp)
 			finalElem.AddComponent(myComp)
 
+		case "Rotator":
+			myComp = render.NewRotator(finalElem)
+			bytes, _ := json.Marshal(comp)
+			json.Unmarshal(bytes, &myComp)
+			finalElem.AddComponent(myComp)
+
 		default:
 			fmt.Println("Component not defined")
 		}
