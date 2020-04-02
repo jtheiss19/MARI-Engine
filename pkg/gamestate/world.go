@@ -10,6 +10,9 @@ import (
 var elementList []*elements.Element
 var elementListTemp []*elements.Element
 
+//NewWorld inits the elementList with elements representing
+//water and a single player element. This is essentially a
+//test enviroment.
 func NewWorld() {
 	for x := 0; x < 10; x++ {
 		for y := 0; y < 10; y++ {
@@ -18,13 +21,18 @@ func NewWorld() {
 		}
 	}
 	myPlayer := objects.NewPlayer(nil)
+
 	elementList = append(elementList, myPlayer)
 }
 
+//GetWorld returns the elementlist representing the current
+//gamestate of the world
 func GetWorld() []*elements.Element {
 	return elementList
 }
 
+//PushElemMap pushes all qued changes in elementListTemp to
+//elementList in a safe way.
 func PushElemMap() {
 	var found bool = false
 	for _, elemTemp := range elementListTemp {

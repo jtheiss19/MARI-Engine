@@ -5,9 +5,13 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/jtheiss19/project-undying/pkg/elements/playerControl"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
 
+//Update is the mainloop designed to be passed into an
+//ebiten run function. It is called every tick and thus
+//every frame. This is what controls game logic and rendering.
 func Update(screen *ebiten.Image) error {
 	if ebiten.IsDrawingSkipped() {
 		return nil
@@ -15,7 +19,7 @@ func Update(screen *ebiten.Image) error {
 
 	tileCount := 0
 
-	for _, elem := range gamestate.GetWorld() {
+	for k, elem := range gamestate.GetWorld() {
 		if elem.Active {
 			err := elem.Update()
 			if err != nil {
@@ -27,9 +31,22 @@ func Update(screen *ebiten.Image) error {
 				fmt.Println("drawing element:", elem)
 				return nil
 			}
+			if k == len(gamestate.GetWorld())-1 {
+				trc := new(playerControl.Tracker)
+				myComp := elem.GetComponent(trc)
+				if myComp != nil {
+					if myComp.(*playerControl.Tracker).GetContainer() == elem {
+						fmt.Println("true")
+					} else {
+						fmt.Println("false")
+					}
+				}
+			}
 			tileCount++
 		}
 	}
+
+	//fmt.Println(gamestate.GetWorld()[len(gamestate.GetWorld())-1])
 
 	msg := fmt.Sprintf(" TPS: %0.2f \n FPS: %0.2f \n Number of Things Drawn: %d", ebiten.CurrentTPS(), ebiten.CurrentFPS(), tileCount)
 	ebitenutil.DebugPrint(screen, msg)

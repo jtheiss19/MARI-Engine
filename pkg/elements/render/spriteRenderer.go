@@ -9,33 +9,49 @@ import (
 	"github.com/jtheiss19/project-undying/pkg/elements"
 )
 
+//SpriteRenderer is the component that handles all
+//rendering of sprites onto the screen
 type SpriteRenderer struct {
 	container *elements.Element
 	Tex       *ebiten.Image
+	Filename  string
 
 	Type          string
 	Width, Height float64
 }
 
-func NewSpriteRenderer(container *elements.Element, filename string, masterTex *ebiten.Image) *SpriteRenderer {
+var textureMapMaster = make(map[string]*ebiten.Image)
+
+//NewSpriteRenderer creates a SpriteRenderer which
+//is the component that handles all rendering of
+//sprites onto the screen
+func NewSpriteRenderer(container *elements.Element, filename string) *SpriteRenderer {
+
 	var tex *ebiten.Image
-	if masterTex == nil {
+	var width, height int
+
+	if textureMapMaster[filename] == nil {
 		tex = textureFromPNG(filename)
+		width, height = tex.Size()
+		textureMapMaster[filename] = tex
 	} else {
-		tex = masterTex
+		tex = textureMapMaster[filename]
+		width, height = tex.Size()
 	}
-	width, height := tex.Size()
 
 	return &SpriteRenderer{
 		container: container,
 		Tex:       tex,
+		Filename:  filename,
 		Width:     float64(width),
 		Height:    float64(height),
 		Type:      "SpriteRenderer",
 	}
 }
 
+//OnDraw Draws the stored texture file onto the screen
 func (sr *SpriteRenderer) OnDraw(screen *ebiten.Image) error {
+
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Reset()
 
@@ -50,6 +66,7 @@ func (sr *SpriteRenderer) OnDraw(screen *ebiten.Image) error {
 	return nil
 }
 
+//OnUpdate is used to qualify SpriteRenderer as a component
 func (sr *SpriteRenderer) OnUpdate() error {
 	return nil
 }
@@ -67,4 +84,8 @@ func textureFromPNG(filename string) *ebiten.Image {
 
 	masterTexture.DrawImage(origEbitenImage, op)
 	return masterTexture
+}
+
+func (sr *SpriteRenderer) OnCheck(elemC *elements.Element) error {
+	return nil
 }
