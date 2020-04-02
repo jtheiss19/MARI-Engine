@@ -18,6 +18,7 @@ type Element struct {
 	Rotation   float64
 	Active     bool
 	Type       string
+	ID         string
 	Components []Component
 }
 
@@ -62,5 +63,5 @@ func (elem *Element) GetComponent(withType Component) Component {
 		}
 	}
 
-	panic(fmt.Sprintf("no component with type %v", reflect.TypeOf(withType)))
+	return nil
 }

@@ -17,6 +17,7 @@ func main() {
 
 	var timeSinceLastUpdate int64
 	for {
+
 		time.Sleep((1000/tps - time.Duration(timeSinceLastUpdate)) * time.Millisecond)
 		now := time.Now().UnixNano()
 

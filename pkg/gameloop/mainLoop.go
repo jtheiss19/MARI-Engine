@@ -5,16 +5,8 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/jtheiss19/project-undying/pkg/elements"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
-	"github.com/jtheiss19/project-undying/pkg/player"
 )
-
-var elementList []*elements.Element
-
-func init() {
-	elementList = append(elementList, player.NewPlayer())
-}
 
 func Update(screen *ebiten.Image) error {
 	if ebiten.IsDrawingSkipped() {

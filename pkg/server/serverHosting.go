@@ -1,12 +1,9 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net"
-
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
 
 	"github.com/jtheiss19/project-undying/pkg/mrp"
 )
@@ -52,30 +49,4 @@ func session(ln net.Listener, newConnSignal chan string, sessionID int) {
 
 	closeConnection := make(chan string)
 	fmt.Println(<-closeConnection)
-}
-
-func handleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
-	for _, mrpItem := range newMRPList {
-		switch mrpItem.GetRequest() {
-		case "UNIT":
-			sendElemMap(conn)
-		}
-	}
-}
-
-func sendElemMap(conn net.Conn) {
-	myMap := gamestate.GetWorld()
-
-	for _, myElem := range myMap {
-		bytes, err := json.Marshal(myElem)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		myMRP := mrp.NewMRP([]byte("ELEM"), bytes, []byte(""))
-		conn.Write(myMRP.MRPToByte())
-	}
-
-	myMRP := mrp.NewMRP([]byte("END"), []byte(""), []byte(""))
-	conn.Write(myMRP.MRPToByte())
 }
