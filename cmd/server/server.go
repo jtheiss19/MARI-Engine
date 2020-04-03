@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
-	"github.com/jtheiss19/project-undying/pkg/server"
+	"github.com/jtheiss19/project-undying/pkg/networking/server"
 )
 
 const tps = 60

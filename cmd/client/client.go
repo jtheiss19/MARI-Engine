@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/hajimehoshi/ebiten"
-	"github.com/jtheiss19/project-undying/pkg/connection"
 	"github.com/jtheiss19/project-undying/pkg/gameloop"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
+	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 )
 
 const (
