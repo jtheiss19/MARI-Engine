@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/jtheiss19/project-undying/pkg/gamemap"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/networking/server"
 )
@@ -13,7 +14,7 @@ const tps = 60
 func main() {
 	go server.Server("8080")
 
-	gamestate.NewWorld()
+	gamemap.NewWorld()
 
 	var timeSinceLastUpdate int64
 	for {
@@ -23,7 +24,7 @@ func main() {
 
 		for _, elem := range gamestate.GetWorld() {
 			if elem.Active {
-				err := elem.Update()
+				err := elem.Update(gamestate.GetWorld())
 				if err != nil {
 					fmt.Println("updating element:", err)
 					return

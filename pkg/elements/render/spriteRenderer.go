@@ -49,7 +49,7 @@ func NewSpriteRenderer(container *elements.Element, filename string) *SpriteRend
 }
 
 //OnDraw Draws the stored texture file onto the screen
-func (sr *SpriteRenderer) OnDraw(screen *ebiten.Image) error {
+func (sr *SpriteRenderer) OnDraw(screen *ebiten.Image, xOffset float64, yOffset float64) error {
 
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Reset()
@@ -59,14 +59,14 @@ func (sr *SpriteRenderer) OnDraw(screen *ebiten.Image) error {
 	op.GeoM.Translate(float64(sr.Width)/2, float64(sr.Height)/2)
 	op.GeoM.Translate(sr.container.XPos, sr.container.YPos)
 
-	//op.GeoM.Translate(xOffset, yOffset)
+	op.GeoM.Translate(xOffset, yOffset)
 
 	screen.DrawImage(sr.Tex, op)
 	return nil
 }
 
 //OnUpdate is used to qualify SpriteRenderer as a component
-func (sr *SpriteRenderer) OnUpdate() error {
+func (sr *SpriteRenderer) OnUpdate(world []*elements.Element) error {
 	return nil
 }
 
@@ -86,5 +86,9 @@ func textureFromPNG(filename string) *ebiten.Image {
 }
 
 func (sr *SpriteRenderer) OnCheck(elemC *elements.Element) error {
+	return nil
+}
+
+func (sr *SpriteRenderer) OnUpdateServer(world []*elements.Element) error {
 	return nil
 }

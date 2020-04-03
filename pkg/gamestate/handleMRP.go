@@ -6,16 +6,15 @@ import (
 	"log"
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/networking/connection"
-
 	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/project-undying/pkg/elements/physics"
 	"github.com/jtheiss19/project-undying/pkg/elements/playerControl"
 	"github.com/jtheiss19/project-undying/pkg/elements/render"
+	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
 )
 
 var serverConnection net.Conn
-var IDs int = 0
 
 //Dial setsup a gamestate to be controlled by the server dialed
 //via the address variable.
@@ -47,19 +46,13 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 		case "REPLIC":
 			for _, elem := range GetWorld() {
 				if elem.ID == mrpItem.GetFooters()[0] {
-					var elemTemp *elements.Element
-					json.Unmarshal([]byte(mrpItem.GetBody()), &elemTemp)
+					var elemTemp = new(elements.Element)
+					handleELEMCreates([]byte(mrpItem.GetBody()), elemTemp)
 
 					if elem.Check(elemTemp) == nil {
 						handleELEMCreates([]byte(mrpItem.GetBody()), elem)
 					}
-				}
-			}
-
-		case "RETURN":
-			for _, elem := range GetWorld() {
-				if elem.ID == mrpItem.GetFooters()[0] {
-					SendElem(conn, elem)
+					go UpdateElemToAll(elem)
 				}
 			}
 
@@ -88,45 +81,27 @@ func handleELEMCreates(bytesMaster []byte, finalElem *elements.Element) {
 
 		case "SpriteRenderer":
 			myComp = render.NewSpriteRenderer(finalElem, comp.(map[string]interface{})["Filename"].(string))
-			bytes, _ := json.Marshal(comp)
-			json.Unmarshal(bytes, myComp)
 			finalElem.AddComponent(myComp)
 
 		case "KeyboardMover":
-
 			myComp = playerControl.NewKeyboardMover(finalElem, 0)
-			bytes, _ := json.Marshal(comp)
-			json.Unmarshal(bytes, &myComp)
 			finalElem.AddComponent(myComp)
 
 		case "Replicator":
 			myComp = playerControl.NewReplicator(finalElem, serverConnection)
-			bytes, _ := json.Marshal(comp)
-			json.Unmarshal(bytes, &myComp)
-			finalElem.AddComponent(myComp)
-
-		case "Clicker":
-			myComp = playerControl.NewClicker(finalElem)
-			bytes, _ := json.Marshal(comp)
-			json.Unmarshal(bytes, &myComp)
-			finalElem.AddComponent(myComp)
-
-		case "Tracker":
-			myComp = playerControl.NewTracker(finalElem, 0, 0, 0)
-			bytes, _ := json.Marshal(comp)
-			json.Unmarshal(bytes, &myComp)
 			finalElem.AddComponent(myComp)
 
 		case "Rotator":
 			myComp = render.NewRotator(finalElem)
-			bytes, _ := json.Marshal(comp)
-			json.Unmarshal(bytes, &myComp)
+			finalElem.AddComponent(myComp)
+
+		case "Collider":
+			myComp = physics.NewCollider(finalElem)
 			finalElem.AddComponent(myComp)
 
 		default:
 			fmt.Println("Component not defined")
 		}
 	}
-
 	json.Unmarshal(bytesMaster, &finalElem)
 }

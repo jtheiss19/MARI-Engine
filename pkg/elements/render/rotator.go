@@ -31,12 +31,12 @@ func NewRotator(container *elements.Element) *Rotator {
 }
 
 //OnDraw Draws the stored texture file onto the screen
-func (rot *Rotator) OnDraw(screen *ebiten.Image) error {
+func (rot *Rotator) OnDraw(screen *ebiten.Image, xOffset float64, yOffset float64) error {
 	return nil
 }
 
 //OnUpdate is used to qualify SpriteRenderer as a component
-func (rot *Rotator) OnUpdate() error {
+func (rot *Rotator) OnUpdate(world []*elements.Element) error {
 	if rot.container.ID != connection.GetID() {
 		return nil
 	}
@@ -50,5 +50,9 @@ func (rot *Rotator) OnUpdate() error {
 }
 
 func (rot *Rotator) OnCheck(elemC *elements.Element) error {
+	return nil
+}
+
+func (rot *Rotator) OnUpdateServer(world []*elements.Element) error {
 	return nil
 }
