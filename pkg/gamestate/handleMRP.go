@@ -7,14 +7,12 @@ import (
 	"net"
 
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/playerControl"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/render"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
 )
 
 var serverConnection net.Conn
+var MRPMAP = make(map[string]elements.Component)
 
 //Dial setsup a gamestate to be controlled by the server dialed
 //via the address variable.
@@ -69,6 +67,7 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 }
 
 func handleELEMCreates(bytesMaster []byte, finalElem *elements.Element) {
+
 	var tempElem map[string]interface{}
 
 	json.Unmarshal(bytesMaster, &tempElem)
@@ -76,32 +75,14 @@ func handleELEMCreates(bytesMaster []byte, finalElem *elements.Element) {
 	test := tempElem["Components"].([]interface{})
 	for _, comp := range test {
 
-		var myComp elements.Component
-		switch comp.(map[string]interface{})["Type"].(string) {
-
-		case "SpriteRenderer":
-			myComp = render.NewSpriteRenderer(finalElem, comp.(map[string]interface{})["Filename"].(string))
-			finalElem.AddComponent(myComp)
-
-		case "KeyboardMover":
-			myComp = playerControl.NewKeyboardMover(finalElem, 0)
-			finalElem.AddComponent(myComp)
-
-		case "Replicator":
-			myComp = playerControl.NewReplicator(finalElem, serverConnection)
-			finalElem.AddComponent(myComp)
-
-		case "Rotator":
-			myComp = render.NewRotator(finalElem)
-			finalElem.AddComponent(myComp)
-
-		case "Collider":
-			myComp = physics.NewCollider(finalElem)
-			finalElem.AddComponent(myComp)
-
-		default:
-			fmt.Println("Component not defined")
+		//var myComp elements.Component
+		kindOfComp := comp.(map[string]interface{})["Type"].(string)
+		myComp := MRPMAP[kindOfComp]
+		if myComp != nil {
+			myComp.MRP(finalElem, serverConnection)
 		}
+
 	}
 	json.Unmarshal(bytesMaster, &finalElem)
+
 }

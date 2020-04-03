@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder"
 	"github.com/jtheiss19/project-undying/pkg/gameloop"
 	"github.com/jtheiss19/project-undying/pkg/gamemap"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
@@ -16,6 +17,10 @@ const (
 	screenScale  = 1
 	addr         = "localhost:8080" //set to "" to launch game in single player
 )
+
+func init() {
+	secondOrder.Init()
+}
 
 func main() {
 

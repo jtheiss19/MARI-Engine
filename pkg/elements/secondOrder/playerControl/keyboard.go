@@ -1,8 +1,11 @@
 package playerControl
 
 import (
+	"net"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 )
 
@@ -14,6 +17,11 @@ type KeyboardMover struct {
 	Type      string
 }
 
+func init() {
+	var mover = new(KeyboardMover)
+	gamestate.MRPMAP["KeyboardMover"] = mover
+}
+
 //NewKeyboardMover creates a KeyboardMover which is
 //the component that handles all keyboard movement
 func NewKeyboardMover(container *elements.Element, speed float64) *KeyboardMover {
@@ -22,6 +30,11 @@ func NewKeyboardMover(container *elements.Element, speed float64) *KeyboardMover
 		Speed:     speed,
 		Type:      "KeyboardMover",
 	}
+}
+
+func (mover *KeyboardMover) MRP(finalElem *elements.Element, conn net.Conn) {
+	myComp := NewKeyboardMover(finalElem, 1)
+	finalElem.AddComponent(myComp)
 }
 
 //OnDraw is used to qualify SpriteRenderer as a component

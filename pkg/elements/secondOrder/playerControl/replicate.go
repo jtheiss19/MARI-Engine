@@ -9,6 +9,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
 )
@@ -21,6 +22,11 @@ type Replicator struct {
 	Type      string
 }
 
+func init() {
+	var replic = new(Replicator)
+	gamestate.MRPMAP["Replicator"] = replic
+}
+
 //NewReplicator creates a Replicator which is
 //the component that handles all replication
 //of an element onto a server.
@@ -30,6 +36,11 @@ func NewReplicator(container *elements.Element, conn net.Conn) *Replicator {
 		conn:      conn,
 		Type:      "Replicator",
 	}
+}
+
+func (replic *Replicator) MRP(finalElem *elements.Element, conn net.Conn) {
+	myComp := NewReplicator(finalElem, conn)
+	finalElem.AddComponent(myComp)
 }
 
 //OnDraw is used to qualify SpriteRenderer as a component

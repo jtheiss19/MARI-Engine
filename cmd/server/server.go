@@ -4,12 +4,17 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder"
 	"github.com/jtheiss19/project-undying/pkg/gamemap"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/networking/server"
 )
 
 const tps = 60
+
+func init() {
+	secondOrder.Init()
+}
 
 func main() {
 	go server.Server("8080")

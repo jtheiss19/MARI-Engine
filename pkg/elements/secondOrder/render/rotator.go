@@ -2,9 +2,11 @@ package render
 
 import (
 	"math"
+	"net"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 )
 
@@ -15,6 +17,11 @@ type Rotator struct {
 	XPrev     float64
 	YPrev     float64
 	Type      string
+}
+
+func init() {
+	var rot = new(Rotator)
+	gamestate.MRPMAP["Rotator"] = rot
 }
 
 //NewRotator creates a SpriteRenderer which
@@ -28,6 +35,11 @@ func NewRotator(container *elements.Element) *Rotator {
 		YPrev:     0,
 		Type:      "Rotator",
 	}
+}
+
+func (rot *Rotator) MRP(finalElem *elements.Element, conn net.Conn) {
+	myComp := NewRotator(finalElem)
+	finalElem.AddComponent(myComp)
 }
 
 //OnDraw Draws the stored texture file onto the screen

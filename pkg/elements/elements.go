@@ -1,6 +1,7 @@
 package elements
 
 import (
+	"net"
 	"reflect"
 
 	"github.com/hajimehoshi/ebiten"
@@ -16,6 +17,7 @@ type Component interface {
 	OnDraw(screen *ebiten.Image, xOffset float64, yOffset float64) error
 	OnCheck(*Element) error
 	OnUpdateServer(world []*Element) error
+	MRP(finalElem *Element, conn net.Conn)
 }
 
 //Element is the basic atomic structure for all objects.

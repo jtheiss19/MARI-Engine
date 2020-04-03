@@ -13,7 +13,7 @@ import (
 var myScreen *elements.Element
 
 func MakeScreen() {
-	myScreen = objects.NewScreen(0, 0)
+	myScreen = objects.NewScreen(-1280/2, -720/2)
 }
 
 //Update is the mainloop designed to be passed into an

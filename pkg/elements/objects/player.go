@@ -17,8 +17,8 @@ const (
 func NewPlayer(conn net.Conn) *elements.Element {
 	player := &elements.Element{}
 
-	player.XPos = 1280 / 2
-	player.YPos = 720 / 2
+	player.XPos = 0
+	player.YPos = 0
 
 	player.Active = true
 

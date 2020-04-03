@@ -11,8 +11,8 @@ import (
 //water and a single player element. This is essentially a
 //test enviroment.
 func NewWorld() {
-	for x := 0; x < 50; x++ {
-		for y := 0; y < 50; y++ {
+	for x := 0; x < 10; x++ {
+		for y := 0; y < 10; y++ {
 			myWater := objects.NewWater(float64(x*64), float64(y*64), strconv.Itoa(x)+","+strconv.Itoa(y))
 			gamestate.AddElemToWorld(myWater)
 			if x%2 == 1 {
