@@ -60,6 +60,20 @@ func (coli *Collider) OnCheck(elemC *elements.Element) error {
 }
 
 func (coli *Collider) OnUpdateServer(world []*elements.Element) error {
+	for _, elem := range world {
+		if elem.GetComponent(coli) != nil && elem.ID != coli.container.ID {
+			elemComp := elem.GetComponent(coli)
+			if isCollison(elemComp.(*Collider), coli) {
+				coli.container.XPos = coli.PrevX
+				coli.container.YPos = coli.PrevY
+				coli.HasCollided = true
+			}
+		}
+	}
+
+	coli.PrevX = coli.container.XPos
+	coli.PrevY = coli.container.YPos
+
 	return nil
 }
 

@@ -2,7 +2,7 @@ package objects
 
 import (
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/playerControl"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/playerControl"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 )
 

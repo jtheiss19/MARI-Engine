@@ -22,9 +22,11 @@ func main() {
 		time.Sleep((1000/tps - time.Duration(timeSinceLastUpdate)) * time.Millisecond)
 		now := time.Now().UnixNano()
 
-		for _, elem := range gamestate.GetWorld() {
+		world := gamestate.GetWorld()
+
+		for _, elem := range world {
 			if elem.Active {
-				err := elem.Update(gamestate.GetWorld())
+				err := elem.UpdateServer(world)
 				if err != nil {
 					fmt.Println("updating element:", err)
 					return

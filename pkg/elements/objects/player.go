@@ -3,11 +3,11 @@ package objects
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/physics"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
 
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/playerControl"
-	"github.com/jtheiss19/project-undying/pkg/elements/render"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/playerControl"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/render"
 )
 
 const (
