@@ -31,7 +31,7 @@ func main() {
 		//fmt.Println(timeSinceLastUpdate)
 		now = time.Now().UnixNano()
 
-		world := gamestate.GetWorld()
+		world := gamestate.GetEntireWorld()
 
 		for _, elem := range world {
 			if elem.Active {

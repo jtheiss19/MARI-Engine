@@ -63,13 +63,13 @@ func (coli *Collider) OnUpdateServer() error {
 		return nil
 	}
 
-	for _, elem := range gamestate.GetWorld() {
+	for _, elem := range gamestate.GetEntireWorld() {
 		if elem.GetComponent(coli) != nil && elem.ID != coli.container.ID {
 			elemComp := elem.GetComponent(coli)
 			if isCollison(elemComp.(*Collider), coli) {
 				coli.container.XPos = coli.posData.(*advancePos.AdvancePosition).PrevX
 				coli.container.YPos = coli.posData.(*advancePos.AdvancePosition).PrevY
-				coli.HasCollided = true
+				coli.HasCollided = false
 			}
 		}
 	}

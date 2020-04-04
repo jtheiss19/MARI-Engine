@@ -36,13 +36,17 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 			var finalElem = new(elements.Element)
 			handleELEMCreates(bytesMaster, finalElem)
 
-			elementListTemp = append(elementListTemp, finalElem)
-			if len(elementListTemp) > 0 {
-				PushElemMap()
-			}
+			//fmt.Println(finalElem)
+			AddUnitToWorld(finalElem)
+			//if len(chunkListTemp) > 0 {
+			PushChunks()
+			//}
 
 		case "REPLIC":
-			for _, elem := range GetWorld() {
+			for _, elem := range GetEntireWorld() {
+				//fmt.Println(elem.ID)
+				//fmt.Println(mrpItem.GetFooters()[0])
+				//fmt.Println()
 				if elem.ID == mrpItem.GetFooters()[0] {
 					var elemTemp = new(elements.Element)
 					handleELEMCreates([]byte(mrpItem.GetBody()), elemTemp)
@@ -63,7 +67,7 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 			connection.SetID(mrpItem.GetBody())
 
 		case "END":
-			PushElemMap()
+			PushChunks()
 
 		default:
 			fmt.Println("Command Not Understood")

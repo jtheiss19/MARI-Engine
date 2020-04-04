@@ -53,6 +53,7 @@ func (mover *KeyboardMover) OnUpdate() error {
 	if mover.container.ID != connection.GetID() || mover.posData == nil {
 		return nil
 	}
+
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
 		mover.posData.(*advancePos.AdvancePosition).VX = -mover.Speed
 	}
