@@ -16,6 +16,7 @@ type Component interface {
 	OnUpdate() error
 	OnDraw(screen *ebiten.Image, xOffset float64, yOffset float64) error
 	OnCheck(*Element) error
+	OnMerge(Component) error
 	OnUpdateServer() error
 	MRP(finalElem *Element, conn net.Conn)
 }
@@ -84,6 +85,19 @@ func (elem *Element) Check(elemC *Element) error {
 	for _, comp := range elem.Components {
 		if comp != nil {
 			err := comp.OnCheck(elemC)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func (elem *Element) Merge(elemM *Element) error {
+	for _, comp := range elem.Components {
+		if comp != nil {
+			err := comp.OnMerge(elemM.GetComponent(comp))
 			if err != nil {
 				return err
 			}

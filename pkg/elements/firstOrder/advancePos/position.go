@@ -47,12 +47,15 @@ func (aPos *AdvancePosition) OnDraw(screen *ebiten.Image, xOffset float64, yOffs
 	return nil
 }
 
+func (aPos *AdvancePosition) OnMerge(compM elements.Component) error {
+	compM.(*AdvancePosition).VX = aPos.VX
+	compM.(*AdvancePosition).VY = aPos.VY
+	return nil
+}
+
 //OnUpdate scans the state of the keyboard and prefroms
 //actions based on said state.
 func (aPos *AdvancePosition) OnUpdate() error {
-	//fmt.Println(aPos)
-	aPos.VX = 0
-	aPos.VY = 0
 	return nil
 }
 
@@ -65,7 +68,6 @@ func (aPos *AdvancePosition) OnCheck(elemC *elements.Element) error {
 }
 
 func (aPos *AdvancePosition) OnUpdateServer() error {
-	//fmt.Println(aPos)
 	aPos.PrevX = aPos.container.XPos
 	aPos.PrevY = aPos.container.YPos
 

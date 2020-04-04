@@ -70,3 +70,7 @@ func (replic *Replicator) OnUpdateServer() error {
 	gamestate.UpdateElemToAll(replic.container)
 	return nil
 }
+
+func (replic *Replicator) OnMerge(compM elements.Component) error {
+	return nil
+}

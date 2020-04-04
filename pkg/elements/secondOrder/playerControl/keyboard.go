@@ -77,3 +77,8 @@ func (mover *KeyboardMover) OnCheck(elemC *elements.Element) error {
 func (mover *KeyboardMover) OnUpdateServer() error {
 	return nil
 }
+
+func (mover *KeyboardMover) OnMerge(compM elements.Component) error {
+	compM = mover
+	return nil
+}

@@ -28,6 +28,9 @@ func NewPlayer(conn net.Conn) *elements.Element {
 
 	//--FIRST ORDER--------------------------------------------//
 
+	shot := playerControl.NewShooter(player)
+	player.AddComponent(shot)
+
 	aPos := advancePos.NewAdvancePosition(player)
 	player.AddComponent(aPos)
 
@@ -39,14 +42,14 @@ func NewPlayer(conn net.Conn) *elements.Element {
 	mover := playerControl.NewKeyboardMover(player, playerSpeed)
 	player.AddComponent(mover)
 
-	replic := playerControl.NewReplicator(player, conn)
-	player.AddComponent(replic)
-
 	coli := physics.NewCollider(player)
 	player.AddComponent(coli)
 
 	rot := render.NewRotator(player)
 	player.AddComponent(rot)
+
+	replic := playerControl.NewReplicator(player, conn)
+	player.AddComponent(replic)
 
 	//--THIRD ORDER--------------------------------------------//
 

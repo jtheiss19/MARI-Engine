@@ -64,9 +64,7 @@ func PushChunks() {
 	var found bool = false
 	for _, chunkTemp := range chunkListTemp {
 		for _, chunk := range chunkList {
-
 			if chunkTemp.ChunkID == chunk.ChunkID {
-
 				//sync Terrain
 				for _, TerrainElemTemp := range chunkTemp.ChunkTerrainData {
 					for _, TerrainElem := range chunk.ChunkTerrainData {

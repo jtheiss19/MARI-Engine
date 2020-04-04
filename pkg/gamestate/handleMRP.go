@@ -36,29 +36,17 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 			var finalElem = new(elements.Element)
 			handleELEMCreates(bytesMaster, finalElem)
 
-			//fmt.Println(finalElem)
 			AddUnitToWorld(finalElem)
-			//if len(chunkListTemp) > 0 {
 			PushChunks()
-			//}
 
 		case "REPLIC":
 			for _, elem := range GetEntireWorld() {
-				//fmt.Println(elem.ID)
-				//fmt.Println(mrpItem.GetFooters()[0])
-				//fmt.Println()
 				if elem.ID == mrpItem.GetFooters()[0] {
 					var elemTemp = new(elements.Element)
 					handleELEMCreates([]byte(mrpItem.GetBody()), elemTemp)
 
 					if elem.Check(elemTemp) == nil {
-						tempX := elem.XPos
-						tempY := elem.YPos
-						tempRotation := elem.Rotation
-						handleELEMCreates([]byte(mrpItem.GetBody()), elem)
-						elem.XPos = tempX
-						elem.YPos = tempY
-						elem.Rotation = tempRotation
+						elemTemp.Merge(elem)
 					}
 				}
 			}

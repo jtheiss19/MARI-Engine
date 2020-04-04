@@ -77,6 +77,10 @@ func (coli *Collider) OnUpdateServer() error {
 	return nil
 }
 
+func (coli *Collider) OnMerge(compM elements.Component) error {
+	return nil
+}
+
 func isCollison(coli1, coli2 *Collider) bool {
 
 	elem1 := coli1.container

@@ -123,3 +123,7 @@ func (sr *SpriteRenderer) OnCheck(elemC *elements.Element) error {
 func (sr *SpriteRenderer) OnUpdateServer() error {
 	return nil
 }
+
+func (sr *SpriteRenderer) OnMerge(compM elements.Component) error {
+	return nil
+}

@@ -55,6 +55,10 @@ func (rot *Rotator) OnCheck(elemC *elements.Element) error {
 	return nil
 }
 
+func (rot *Rotator) OnMerge(compM elements.Component) error {
+	return nil
+}
+
 func (rot *Rotator) OnUpdateServer() error {
 
 	if rot.container.YPos == rot.posData.(*advancePos.AdvancePosition).PrevY && rot.container.XPos == rot.posData.(*advancePos.AdvancePosition).PrevX {
