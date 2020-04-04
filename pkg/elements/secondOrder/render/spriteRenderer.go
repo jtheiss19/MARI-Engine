@@ -97,7 +97,7 @@ func (sr *SpriteRenderer) OnDraw(screen *ebiten.Image, xOffset float64, yOffset 
 }
 
 //OnUpdate is used to qualify SpriteRenderer as a component
-func (sr *SpriteRenderer) OnUpdate() error {
+func (sr *SpriteRenderer) OnUpdate(xOffset float64, yOffset float64) error {
 	return nil
 }
 

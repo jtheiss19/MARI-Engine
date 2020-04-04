@@ -47,7 +47,7 @@ func (rot *Rotator) OnDraw(screen *ebiten.Image, xOffset float64, yOffset float6
 }
 
 //OnUpdate is used to qualify SpriteRenderer as a component
-func (rot *Rotator) OnUpdate() error {
+func (rot *Rotator) OnUpdate(xOffset float64, yOffset float64) error {
 	return nil
 }
 

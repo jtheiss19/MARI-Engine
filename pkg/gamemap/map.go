@@ -22,5 +22,6 @@ func NewWorld() {
 			}
 		}
 	}
+
 	gamestate.PushChunks()
 }

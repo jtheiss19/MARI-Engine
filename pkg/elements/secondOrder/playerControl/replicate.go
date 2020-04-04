@@ -49,7 +49,7 @@ func (replic *Replicator) OnDraw(screen *ebiten.Image, xOffset float64, yOffset 
 //connection if it exists. On servers to not init elements
 //with a connection. On clients init the objects with a
 //connection.
-func (replic *Replicator) OnUpdate() error {
+func (replic *Replicator) OnUpdate(xOffset float64, yOffset float64) error {
 	if replic.conn != nil {
 
 		if replic.container.ID == connection.GetID() {

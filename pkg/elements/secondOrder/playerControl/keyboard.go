@@ -28,7 +28,6 @@ func init() {
 //NewKeyboardMover creates a KeyboardMover which is
 //the component that handles all keyboard movement
 func NewKeyboardMover(container *elements.Element, speed float64) *KeyboardMover {
-
 	return &KeyboardMover{
 		container: container,
 		posData:   container.GetComponent(new(advancePos.AdvancePosition)),
@@ -49,22 +48,22 @@ func (mover *KeyboardMover) OnDraw(screen *ebiten.Image, xOffset float64, yOffse
 
 //OnUpdate scans the state of the keyboard and prefroms
 //actions based on said state.
-func (mover *KeyboardMover) OnUpdate() error {
+func (mover *KeyboardMover) OnUpdate(xOffset float64, yOffset float64) error {
 	if mover.container.ID != connection.GetID() || mover.posData == nil {
 		return nil
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		mover.posData.(*advancePos.AdvancePosition).VX = -mover.Speed
+		mover.posData.(*advancePos.AdvancePosition).VX += -mover.posData.(*advancePos.AdvancePosition).Speed
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		mover.posData.(*advancePos.AdvancePosition).VX = mover.Speed
+		mover.posData.(*advancePos.AdvancePosition).VX += mover.posData.(*advancePos.AdvancePosition).Speed
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		mover.posData.(*advancePos.AdvancePosition).VY = -mover.Speed
+		mover.posData.(*advancePos.AdvancePosition).VY += -mover.posData.(*advancePos.AdvancePosition).Speed
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		mover.posData.(*advancePos.AdvancePosition).VY = mover.Speed
+		mover.posData.(*advancePos.AdvancePosition).VY += mover.posData.(*advancePos.AdvancePosition).Speed
 	}
 
 	return nil
@@ -79,6 +78,5 @@ func (mover *KeyboardMover) OnUpdateServer() error {
 }
 
 func (mover *KeyboardMover) OnMerge(compM elements.Component) error {
-	compM = mover
 	return nil
 }

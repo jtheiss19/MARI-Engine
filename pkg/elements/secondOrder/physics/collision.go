@@ -50,7 +50,7 @@ func (coli *Collider) OnDraw(screen *ebiten.Image, xOffset float64, yOffset floa
 
 //OnUpdate scans the state of the keyboard and prefroms
 //actions based on said state.
-func (coli *Collider) OnUpdate() error {
+func (coli *Collider) OnUpdate(xOffset float64, yOffset float64) error {
 	return nil
 }
 
@@ -64,7 +64,7 @@ func (coli *Collider) OnUpdateServer() error {
 	}
 
 	for _, elem := range gamestate.GetEntireWorld() {
-		if elem.GetComponent(coli) != nil && elem.ID != coli.container.ID {
+		if elem.GetComponent(coli) != nil && elem.UniqueName != coli.container.UniqueName {
 			elemComp := elem.GetComponent(coli)
 			if isCollison(elemComp.(*Collider), coli) {
 				coli.container.XPos = coli.posData.(*advancePos.AdvancePosition).PrevX

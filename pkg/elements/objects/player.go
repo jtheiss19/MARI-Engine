@@ -28,16 +28,16 @@ func NewPlayer(conn net.Conn) *elements.Element {
 
 	//--FIRST ORDER--------------------------------------------//
 
-	shot := playerControl.NewShooter(player)
-	player.AddComponent(shot)
-
-	aPos := advancePos.NewAdvancePosition(player)
+	aPos := advancePos.NewAdvancePosition(player, playerSpeed)
 	player.AddComponent(aPos)
 
 	//--SECOND ORDER-------------------------------------------//
 
 	sr := render.NewSpriteRenderer(player, "destroyer.png")
 	player.AddComponent(sr)
+
+	shot := playerControl.NewShooter(player)
+	player.AddComponent(shot)
 
 	mover := playerControl.NewKeyboardMover(player, playerSpeed)
 	player.AddComponent(mover)
@@ -48,10 +48,12 @@ func NewPlayer(conn net.Conn) *elements.Element {
 	rot := render.NewRotator(player)
 	player.AddComponent(rot)
 
+	//--THIRD ORDER--------------------------------------------//
+
+	//--NETWORKING---------------------------------------------//
+
 	replic := playerControl.NewReplicator(player, conn)
 	player.AddComponent(replic)
-
-	//--THIRD ORDER--------------------------------------------//
 
 	return player
 }

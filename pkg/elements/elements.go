@@ -13,7 +13,7 @@ import (
 //function then it counts as a component. These functions
 //may be empty.
 type Component interface {
-	OnUpdate() error
+	OnUpdate(xOffset float64, yOffset float64) error
 	OnDraw(screen *ebiten.Image, xOffset float64, yOffset float64) error
 	OnCheck(*Element) error
 	OnMerge(Component) error
@@ -55,10 +55,10 @@ func (elem *Element) Draw(screen *ebiten.Image, xOffset float64, yOffset float64
 //and runs the OnUpdate() function for each one.
 //Error is returned through the first error from a
 //components OnUpdate() function.
-func (elem *Element) Update() error {
+func (elem *Element) Update(xOffset float64, yOffset float64) error {
 	for _, comp := range elem.Components {
 		if comp != nil {
-			err := comp.OnUpdate()
+			err := comp.OnUpdate(xOffset, yOffset)
 			if err != nil {
 				return err
 			}
@@ -120,6 +120,24 @@ func (elem *Element) AddComponent(new Component) {
 		}
 	}
 	elem.Components = append(elem.Components, new)
+}
+
+func (elem *Element) AddComponentPostInit(new Component) {
+	elem.RemoveComponentType(new)
+	potentialReplic := elem.Components[len(elem.Components)-1]
+	temp := elem.Components[:len(elem.Components)-1]
+	elem.Components = append(temp, new)
+	elem.Components = append(elem.Components, potentialReplic)
+}
+
+func (elem *Element) RemoveComponentType(badComp Component) {
+	for k, existing := range elem.Components {
+		if reflect.TypeOf(badComp) == reflect.TypeOf(existing) {
+			copy(elem.Components[k:], elem.Components[k+1:])
+			elem.Components[len(elem.Components)-1] = nil
+			elem.Components = elem.Components[:len(elem.Components)-1]
+		}
+	}
 }
 
 //GetComponent gets a component in the component

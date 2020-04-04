@@ -30,15 +30,16 @@ func init() {
 
 //NewAdvancePosition creates a KeyboardMover which is
 //the component that handles all keyboard movement
-func NewAdvancePosition(container *elements.Element) *AdvancePosition {
+func NewAdvancePosition(container *elements.Element, Speed float64) *AdvancePosition {
 	return &AdvancePosition{
 		container: container,
 		Type:      "AdvancePosition",
+		Speed:     Speed,
 	}
 }
 
 func (aPos *AdvancePosition) MRP(finalElem *elements.Element, conn net.Conn) {
-	myComp := NewAdvancePosition(finalElem)
+	myComp := NewAdvancePosition(finalElem, 0)
 	finalElem.AddComponent(myComp)
 }
 
@@ -55,7 +56,7 @@ func (aPos *AdvancePosition) OnMerge(compM elements.Component) error {
 
 //OnUpdate scans the state of the keyboard and prefroms
 //actions based on said state.
-func (aPos *AdvancePosition) OnUpdate() error {
+func (aPos *AdvancePosition) OnUpdate(xOffset float64, yOffset float64) error {
 	return nil
 }
 
