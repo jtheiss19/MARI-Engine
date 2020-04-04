@@ -37,7 +37,7 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 			handleELEMCreates(bytesMaster, finalElem)
 
 			elementListTemp = append(elementListTemp, finalElem)
-			if len(elementListTemp) > 10 {
+			if len(elementListTemp) > 0 {
 				PushElemMap()
 			}
 
@@ -48,9 +48,14 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 					handleELEMCreates([]byte(mrpItem.GetBody()), elemTemp)
 
 					if elem.Check(elemTemp) == nil {
+						tempX := elem.XPos
+						tempY := elem.YPos
+						tempRotation := elem.Rotation
 						handleELEMCreates([]byte(mrpItem.GetBody()), elem)
+						elem.XPos = tempX
+						elem.YPos = tempY
+						elem.Rotation = tempRotation
 					}
-					go UpdateElemToAll(elem)
 				}
 			}
 
@@ -83,6 +88,6 @@ func handleELEMCreates(bytesMaster []byte, finalElem *elements.Element) {
 		}
 
 	}
-	json.Unmarshal(bytesMaster, &finalElem)
 
+	json.Unmarshal(bytesMaster, &finalElem)
 }

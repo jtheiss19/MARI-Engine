@@ -2,9 +2,6 @@ package playerControl
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
-	"math"
 	"net"
 
 	"github.com/hajimehoshi/ebiten"
@@ -52,7 +49,7 @@ func (replic *Replicator) OnDraw(screen *ebiten.Image, xOffset float64, yOffset 
 //connection if it exists. On servers to not init elements
 //with a connection. On clients init the objects with a
 //connection.
-func (replic *Replicator) OnUpdate(world []*elements.Element) error {
+func (replic *Replicator) OnUpdate() error {
 	if replic.conn != nil {
 
 		if replic.container.ID == connection.GetID() {
@@ -66,13 +63,10 @@ func (replic *Replicator) OnUpdate(world []*elements.Element) error {
 }
 
 func (replic *Replicator) OnCheck(elemC *elements.Element) error {
-	if math.Abs(replic.container.XPos-elemC.XPos) >= 20 {
-		fmt.Print("RubberBand")
-		return errors.New("DeSync")
-	}
 	return nil
 }
 
-func (replic *Replicator) OnUpdateServer(world []*elements.Element) error {
+func (replic *Replicator) OnUpdateServer() error {
+	gamestate.UpdateElemToAll(replic.container)
 	return nil
 }

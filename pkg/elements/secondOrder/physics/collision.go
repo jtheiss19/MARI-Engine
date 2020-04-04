@@ -4,6 +4,7 @@ import (
 	"math"
 	"net"
 
+	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 
 	"github.com/hajimehoshi/ebiten"
@@ -14,10 +15,9 @@ import (
 //keyboard movement
 type Collider struct {
 	container   *elements.Element
+	posData     elements.Component
 	Type        string
 	Radius      float64
-	PrevX       float64
-	PrevY       float64
 	HasCollided bool
 }
 
@@ -32,6 +32,7 @@ func NewCollider(container *elements.Element) *Collider {
 	return &Collider{
 		container:   container,
 		Type:        "Collider",
+		posData:     container.GetComponent(new(advancePos.AdvancePosition)),
 		Radius:      50,
 		HasCollided: false,
 	}
@@ -49,22 +50,7 @@ func (coli *Collider) OnDraw(screen *ebiten.Image, xOffset float64, yOffset floa
 
 //OnUpdate scans the state of the keyboard and prefroms
 //actions based on said state.
-func (coli *Collider) OnUpdate(world []*elements.Element) error {
-
-	for _, elem := range world {
-		if elem.GetComponent(coli) != nil && elem.ID != coli.container.ID {
-			elemComp := elem.GetComponent(coli)
-			if isCollison(elemComp.(*Collider), coli) {
-				coli.container.XPos = coli.PrevX
-				coli.container.YPos = coli.PrevY
-				coli.HasCollided = true
-			}
-		}
-	}
-
-	coli.PrevX = coli.container.XPos
-	coli.PrevY = coli.container.YPos
-
+func (coli *Collider) OnUpdate() error {
 	return nil
 }
 
@@ -72,21 +58,21 @@ func (coli *Collider) OnCheck(elemC *elements.Element) error {
 	return nil
 }
 
-func (coli *Collider) OnUpdateServer(world []*elements.Element) error {
-	gamestate.GetWorld()
-	for _, elem := range world {
+func (coli *Collider) OnUpdateServer() error {
+	if coli.posData == nil {
+		return nil
+	}
+
+	for _, elem := range gamestate.GetWorld() {
 		if elem.GetComponent(coli) != nil && elem.ID != coli.container.ID {
 			elemComp := elem.GetComponent(coli)
 			if isCollison(elemComp.(*Collider), coli) {
-				coli.container.XPos = coli.PrevX
-				coli.container.YPos = coli.PrevY
+				coli.container.XPos = coli.posData.(*advancePos.AdvancePosition).PrevX
+				coli.container.YPos = coli.posData.(*advancePos.AdvancePosition).PrevY
 				coli.HasCollided = true
 			}
 		}
 	}
-
-	coli.PrevX = coli.container.XPos
-	coli.PrevY = coli.container.YPos
 
 	return nil
 }

@@ -3,6 +3,8 @@ package objects
 import (
 	"net"
 
+	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
+
 	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
 
 	"github.com/jtheiss19/project-undying/pkg/elements"
@@ -24,6 +26,13 @@ func NewPlayer(conn net.Conn) *elements.Element {
 
 	player.UniqueName = "player"
 
+	//--FIRST ORDER--------------------------------------------//
+
+	aPos := advancePos.NewAdvancePosition(player)
+	player.AddComponent(aPos)
+
+	//--SECOND ORDER-------------------------------------------//
+
 	sr := render.NewSpriteRenderer(player, "destroyer.png")
 	player.AddComponent(sr)
 
@@ -38,6 +47,8 @@ func NewPlayer(conn net.Conn) *elements.Element {
 
 	rot := render.NewRotator(player)
 	player.AddComponent(rot)
+
+	//--THIRD ORDER--------------------------------------------//
 
 	return player
 }

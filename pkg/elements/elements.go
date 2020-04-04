@@ -13,10 +13,10 @@ import (
 //function then it counts as a component. These functions
 //may be empty.
 type Component interface {
-	OnUpdate(world []*Element) error
+	OnUpdate() error
 	OnDraw(screen *ebiten.Image, xOffset float64, yOffset float64) error
 	OnCheck(*Element) error
-	OnUpdateServer(world []*Element) error
+	OnUpdateServer() error
 	MRP(finalElem *Element, conn net.Conn)
 }
 
@@ -54,10 +54,10 @@ func (elem *Element) Draw(screen *ebiten.Image, xOffset float64, yOffset float64
 //and runs the OnUpdate() function for each one.
 //Error is returned through the first error from a
 //components OnUpdate() function.
-func (elem *Element) Update(world []*Element) error {
+func (elem *Element) Update() error {
 	for _, comp := range elem.Components {
 		if comp != nil {
-			err := comp.OnUpdate(world)
+			err := comp.OnUpdate()
 			if err != nil {
 				return err
 			}
@@ -67,10 +67,10 @@ func (elem *Element) Update(world []*Element) error {
 	return nil
 }
 
-func (elem *Element) UpdateServer(world []*Element) error {
+func (elem *Element) UpdateServer() error {
 	for _, comp := range elem.Components {
 		if comp != nil {
-			err := comp.OnUpdateServer(world)
+			err := comp.OnUpdateServer()
 			if err != nil {
 				return err
 			}
