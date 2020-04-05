@@ -41,13 +41,15 @@ func HandleMRP(newMRPList []*mrp.MRP, conn net.Conn) {
 
 		case "REPLIC":
 			for _, elem := range GetEntireWorld() {
-				if elem.ID == mrpItem.GetFooters()[0] {
+				if elem.UniqueName == mrpItem.GetFooters()[0] {
 					var elemTemp = new(elements.Element)
 					handleELEMCreates([]byte(mrpItem.GetBody()), elemTemp)
 
 					if elem.Check(elemTemp) == nil {
 						elemTemp.Merge(elem)
 					}
+
+					break
 				}
 			}
 
@@ -72,13 +74,15 @@ func handleELEMCreates(bytesMaster []byte, finalElem *elements.Element) {
 	test := tempElem["Components"].([]interface{})
 	for _, comp := range test {
 
-		//var myComp elements.Component
-		kindOfComp := comp.(map[string]interface{})["Type"].(string)
-		myComp := MRPMAP[kindOfComp]
-		if myComp != nil {
-			myComp.MRP(finalElem, serverConnection)
-		}
+		if comp != nil {
 
+			//var myComp elements.Component
+			kindOfComp := comp.(map[string]interface{})["Type"].(string)
+			myComp := MRPMAP[kindOfComp]
+			if myComp != nil {
+				myComp.MRP(finalElem, serverConnection)
+			}
+		}
 	}
 
 	json.Unmarshal(bytesMaster, &finalElem)

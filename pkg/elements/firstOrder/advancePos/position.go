@@ -35,6 +35,8 @@ func NewAdvancePosition(container *elements.Element, Speed float64) *AdvancePosi
 		container: container,
 		Type:      "AdvancePosition",
 		Speed:     Speed,
+		PrevX:     0,
+		PrevY:     0,
 	}
 }
 
@@ -87,4 +89,14 @@ func (aPos *AdvancePosition) OnUpdateServer() error {
 	}
 
 	return nil
+}
+
+func (aPos *AdvancePosition) SetContainer(container *elements.Element) error {
+	aPos.container = container
+	return nil
+}
+
+func (aPos *AdvancePosition) MakeCopy() elements.Component {
+	myComp := *aPos
+	return &myComp
 }

@@ -10,6 +10,8 @@ import (
 	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
 )
 
+var ObjectMap = make(map[string]*elements.Element)
+
 type Chunk struct {
 	ChunkID          string
 	ChunkTerrainData []*elements.Element
@@ -26,7 +28,6 @@ func GetEntireWorld() []*elements.Element {
 
 		masterMap = append(masterMap, chunk.ChunkTerrainData...)
 		masterMap = append(masterMap, chunk.ChunkUnitData...)
-
 	}
 
 	return masterMap
@@ -43,10 +44,6 @@ func AddUnitToWorld(elem *elements.Element) {
 		CreateChunk()
 	}
 	chunkListTemp[0].ChunkUnitData = append(chunkListTemp[0].ChunkUnitData, elem)
-	for _, client := range connectionList {
-		SendElem(client, elem)
-		ForceUpdate(client)
-	}
 }
 
 func AddTerrainToWorld(elem *elements.Element) {
@@ -54,10 +51,12 @@ func AddTerrainToWorld(elem *elements.Element) {
 		CreateChunk()
 	}
 	chunkListTemp[0].ChunkTerrainData = append(chunkListTemp[0].ChunkTerrainData, elem)
-	for _, client := range connectionList {
-		SendElem(client, elem)
-		ForceUpdate(client)
-	}
+}
+
+func GetObject(objectName string) *elements.Element {
+	var returnElem *elements.Element = new(elements.Element)
+	returnElem = ObjectMap[objectName].MakeCopy()
+	return returnElem
 }
 
 func PushChunks() {
@@ -95,9 +94,7 @@ func PushChunks() {
 						chunk.ChunkUnitData = append(chunk.ChunkUnitData, unitElemTemp)
 					}
 				}
-
 			}
-
 		}
 		chunkTemp.ChunkUnitData = []*elements.Element{}
 		chunkTemp.ChunkTerrainData = []*elements.Element{}

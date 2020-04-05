@@ -3,6 +3,8 @@ package objects
 import (
 	"net"
 
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
+
 	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
 
 	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
@@ -11,6 +13,10 @@ import (
 	"github.com/jtheiss19/project-undying/pkg/elements"
 	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/render"
 )
+
+func init() {
+	gamestate.ObjectMap["Bullet"] = NewBullet(nil, 0, 0)
+}
 
 func NewBullet(conn net.Conn, DestX, DestY float64) *elements.Element {
 	bullet := &elements.Element{}
@@ -35,11 +41,12 @@ func NewBullet(conn net.Conn, DestX, DestY float64) *elements.Element {
 	rot := render.NewRotator(bullet)
 	bullet.AddComponent(rot)
 
-	mov := playerControl.NewMoveTo(bullet, DestX, DestY)
-	bullet.AddComponent(mov)
-
 	coli := physics.NewCollider(bullet)
 	bullet.AddComponent(coli)
+
+	mov := playerControl.NewMoveTo(bullet, -400, -400)
+	bullet.AddComponent(mov)
+
 	//--THIRD ORDER--------------------------------------------//
 
 	replic := playerControl.NewReplicator(bullet, conn)

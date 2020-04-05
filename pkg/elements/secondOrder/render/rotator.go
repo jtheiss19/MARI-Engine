@@ -62,9 +62,20 @@ func (rot *Rotator) OnMerge(compM elements.Component) error {
 func (rot *Rotator) OnUpdateServer() error {
 
 	if rot.container.YPos == rot.posData.(*advancePos.AdvancePosition).PrevY && rot.container.XPos == rot.posData.(*advancePos.AdvancePosition).PrevX {
+	} else if rot.posData.(*advancePos.AdvancePosition).PrevY == 0 || rot.posData.(*advancePos.AdvancePosition).PrevX == 0 {
 	} else {
 		rot.container.Rotation = math.Atan2((rot.container.YPos - rot.posData.(*advancePos.AdvancePosition).PrevY), (rot.container.XPos - rot.posData.(*advancePos.AdvancePosition).PrevX))
 	}
 
 	return nil
+}
+
+func (rot *Rotator) SetContainer(container *elements.Element) error {
+	rot.container = container
+	return nil
+}
+
+func (rot *Rotator) MakeCopy() elements.Component {
+	myComp := *rot
+	return &myComp
 }

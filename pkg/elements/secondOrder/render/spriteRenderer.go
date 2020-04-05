@@ -127,3 +127,13 @@ func (sr *SpriteRenderer) OnUpdateServer() error {
 func (sr *SpriteRenderer) OnMerge(compM elements.Component) error {
 	return nil
 }
+
+func (sr *SpriteRenderer) SetContainer(container *elements.Element) error {
+	sr.container = container
+	return nil
+}
+
+func (sr *SpriteRenderer) MakeCopy() elements.Component {
+	myComp := *sr
+	return &myComp
+}

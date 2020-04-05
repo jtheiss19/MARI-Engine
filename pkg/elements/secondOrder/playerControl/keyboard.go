@@ -80,3 +80,14 @@ func (mover *KeyboardMover) OnUpdateServer() error {
 func (mover *KeyboardMover) OnMerge(compM elements.Component) error {
 	return nil
 }
+
+func (mover *KeyboardMover) SetContainer(container *elements.Element) error {
+	mover.container = container
+	mover.posData = container.GetComponent(new(advancePos.AdvancePosition))
+	return nil
+}
+
+func (mover *KeyboardMover) MakeCopy() elements.Component {
+	myComp := *mover
+	return &myComp
+}

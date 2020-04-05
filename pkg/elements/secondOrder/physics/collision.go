@@ -96,3 +96,14 @@ func isCollison(coli1, coli2 *Collider) bool {
 	}
 	return false
 }
+
+func (coli *Collider) SetContainer(container *elements.Element) error {
+	coli.container = container
+	coli.posData = container.GetComponent(new(advancePos.AdvancePosition))
+	return nil
+}
+
+func (coli *Collider) MakeCopy() elements.Component {
+	myComp := *coli
+	return &myComp
+}

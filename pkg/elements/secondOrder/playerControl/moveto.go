@@ -37,6 +37,7 @@ func NewMoveTo(container *elements.Element, DestX float64, DestY float64) *MoveT
 		DestX:     DestX,
 		DestY:     DestY,
 	}
+
 }
 
 func (mov *MoveTo) MRP(finalElem *elements.Element, conn net.Conn) {
@@ -62,18 +63,32 @@ func (mov *MoveTo) OnCheck(elemC *elements.Element) error {
 }
 
 func (mov *MoveTo) OnMerge(compM elements.Component) error {
+
 	return nil
 }
 
 func (mov *MoveTo) OnUpdateServer() error {
+
 	hypot := math.Hypot(mov.DestX-mov.container.XPos, mov.DestY-mov.container.YPos)
 	if hypot <= 10 {
 		mov.container.RemoveComponentType(mov)
-		return nil
 	}
+
 	UnitX := (mov.DestX - mov.container.XPos) / hypot
 	UnitY := (mov.DestY - mov.container.YPos) / hypot
 	mov.posData.(*advancePos.AdvancePosition).VX += mov.posData.(*advancePos.AdvancePosition).Speed * UnitX
 	mov.posData.(*advancePos.AdvancePosition).VY += mov.posData.(*advancePos.AdvancePosition).Speed * UnitY
+
 	return nil
+}
+
+func (mov *MoveTo) SetContainer(container *elements.Element) error {
+	mov.container = container
+	mov.posData = container.GetComponent(new(advancePos.AdvancePosition))
+	return nil
+}
+
+func (mov *MoveTo) MakeCopy() elements.Component {
+	myComp := *mov
+	return &myComp
 }

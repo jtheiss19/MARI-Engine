@@ -50,15 +50,13 @@ func (replic *Replicator) OnDraw(screen *ebiten.Image, xOffset float64, yOffset 
 //with a connection. On clients init the objects with a
 //connection.
 func (replic *Replicator) OnUpdate(xOffset float64, yOffset float64) error {
-	if replic.conn != nil {
 
-		if replic.container.ID == connection.GetID() {
-			bytes, _ := json.Marshal(replic.container)
-			myMRP := mrp.NewMRP([]byte("REPLIC"), []byte(bytes), []byte(replic.container.ID))
-			replic.conn.Write(myMRP.MRPToByte())
-		}
-
+	if replic.container.ID == connection.GetID() {
+		bytes, _ := json.Marshal(replic.container)
+		myMRP := mrp.NewMRP([]byte("REPLIC"), []byte(bytes), []byte(replic.container.UniqueName))
+		replic.conn.Write(myMRP.MRPToByte())
 	}
+
 	return nil
 }
 
@@ -73,4 +71,14 @@ func (replic *Replicator) OnUpdateServer() error {
 
 func (replic *Replicator) OnMerge(compM elements.Component) error {
 	return nil
+}
+
+func (replic *Replicator) SetContainer(container *elements.Element) error {
+	replic.container = container
+	return nil
+}
+
+func (replic *Replicator) MakeCopy() elements.Component {
+	myComp := *replic
+	return &myComp
 }

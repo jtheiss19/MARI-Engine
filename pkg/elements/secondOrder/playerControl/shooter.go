@@ -1,13 +1,13 @@
 package playerControl
 
 import (
+	"fmt"
+	"math"
 	"net"
+	"strconv"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/render"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 )
@@ -20,6 +20,7 @@ type Shooter struct {
 	HasFired  bool
 	DestX     float64
 	DestY     float64
+	cooldown  int
 }
 
 func init() {
@@ -34,6 +35,8 @@ func NewShooter(container *elements.Element) *Shooter {
 	return &Shooter{
 		container: container,
 		Type:      "Shooter",
+		cooldown:  0,
+		HasFired:  false,
 	}
 }
 
@@ -52,14 +55,13 @@ func (shoot *Shooter) OnDraw(screen *ebiten.Image, xOffset float64, yOffset floa
 //with a connection. On clients init the objects with a
 //connection.
 func (shoot *Shooter) OnUpdate(xOffset float64, yOffset float64) error {
-	if shoot.container.ID != connection.GetID() {
+	if shoot.HasFired == true || shoot.container.ID != connection.GetID() {
 		return nil
 	}
 
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 		shoot.HasFired = true
 		w, h := ebiten.CursorPosition()
-		//myScreen := gameScreen.GetScreen()
 		shoot.DestX = float64(w) - xOffset
 		shoot.DestY = float64(h) - yOffset
 	}
@@ -77,50 +79,49 @@ func (shoot *Shooter) OnMerge(compM elements.Component) error {
 	return nil
 }
 
+var count int
+
 func (shoot *Shooter) OnUpdateServer() error {
+
 	if shoot.HasFired {
-		//shoot.container.AddComponentPostInit(NewMoveTo(shoot.container, shoot.DestX, shoot.DestY))
-		gamestate.AddUnitToWorld(NewBullet(nil, shoot.DestX, shoot.DestY))
+		if shoot.cooldown == 0 {
+			count++
+			shoot.cooldown = 60
+
+			myBullet := gamestate.GetObject("Bullet")
+			myBullet.UniqueName = "BULLET" + strconv.Itoa(count)
+
+			mov := NewMoveTo(myBullet, shoot.DestX, shoot.DestY)
+			myBullet.AddComponentPostInit(mov)
+
+			rot := math.Atan2(shoot.DestY-shoot.container.YPos, shoot.DestX-shoot.container.XPos)
+			uY, uX := math.Sincos(rot)
+
+			fmt.Println(rot)
+			myBullet.Rotation = rot
+			myBullet.XPos = shoot.container.XPos + uX*50
+			myBullet.YPos = shoot.container.YPos + uY*50
+
+			gamestate.AddUnitToWorld(myBullet)
+			gamestate.PushChunks()
+
+		}
 		shoot.HasFired = false
-		gamestate.PushChunks()
+	}
+
+	if shoot.cooldown > 0 {
+		shoot.cooldown -= 1
 	}
 
 	return nil
 }
 
-func NewBullet(conn net.Conn, DestX, DestY float64) *elements.Element {
-	bullet := &elements.Element{}
+func (shoot *Shooter) SetContainer(container *elements.Element) error {
+	shoot.container = container
+	return nil
+}
 
-	bullet.XPos = 0
-	bullet.YPos = 0
-
-	bullet.Active = true
-
-	bullet.UniqueName = "MyBullet"
-
-	//--FIRST ORDER--------------------------------------------//
-
-	aPos := advancePos.NewAdvancePosition(bullet, 10)
-	bullet.AddComponent(aPos)
-
-	//--SECOND ORDER-------------------------------------------//
-
-	sr := render.NewSpriteRenderer(bullet, "carrier.png")
-	bullet.AddComponent(sr)
-
-	coli := physics.NewCollider(bullet)
-	bullet.AddComponent(coli)
-
-	rot := render.NewRotator(bullet)
-	bullet.AddComponent(rot)
-
-	mov := NewMoveTo(bullet, DestX, DestY)
-	bullet.AddComponent(mov)
-
-	//--THIRD ORDER--------------------------------------------//
-
-	replic := NewReplicator(bullet, conn)
-	bullet.AddComponent(replic)
-
-	return bullet
+func (shoot *Shooter) MakeCopy() elements.Component {
+	myComp := *shoot
+	return &myComp
 }

@@ -19,6 +19,8 @@ type Component interface {
 	OnMerge(Component) error
 	OnUpdateServer() error
 	MRP(finalElem *Element, conn net.Conn)
+	SetContainer(*Element) error
+	MakeCopy() Component
 }
 
 //Element is the basic atomic structure for all objects.
@@ -107,6 +109,19 @@ func (elem *Element) Merge(elemM *Element) error {
 	return nil
 }
 
+func (elem *Element) SetContainer(container *Element) error {
+	for _, comp := range elem.Components {
+		if comp != nil {
+			err := comp.SetContainer(container)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 //AddComponent adds a component to the component
 //slice stored within the element. Panics if the
 //component already exists within the slice.
@@ -153,4 +168,21 @@ func (elem *Element) GetComponent(withType Component) Component {
 	}
 
 	return nil
+}
+
+func (elem *Element) MakeCopy() *Element {
+
+	myBlankElem := *elem
+	myBlankElem.Components = *new([]Component)
+
+	for _, myComp := range elem.Components {
+		if myComp != nil {
+			newCopy := myComp.MakeCopy()
+			myBlankElem.AddComponent(newCopy)
+		}
+	}
+
+	myBlankElem.SetContainer(&myBlankElem)
+
+	return &myBlankElem
 }
