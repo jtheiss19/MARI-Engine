@@ -63,8 +63,8 @@ func (aPos *AdvancePosition) OnUpdate(xOffset float64, yOffset float64) error {
 }
 
 func (aPos *AdvancePosition) OnCheck(elemC *elements.Element) error {
-	if math.Abs(aPos.container.XPos-elemC.XPos) >= 20 {
-		fmt.Print("RubberBand")
+	if math.Abs(aPos.container.XPos-elemC.XPos) >= 200 {
+		fmt.Println("RubberBand")
 		return errors.New("DeSync")
 	}
 	return nil
