@@ -77,6 +77,10 @@ func (aPos *AdvancePosition) OnUpdateServer() error {
 	aPos.container.XPos += aPos.VX
 	aPos.container.YPos += aPos.VY
 
+	if aPos.VX != 0 || aPos.VY != 0 {
+		aPos.container.Same = false
+	}
+
 	aPos.VX = 0
 	aPos.VY = 0
 

@@ -103,6 +103,8 @@ func (shoot *Shooter) OnUpdateServer() error {
 			gamestate.AddUnitToWorld(myBullet)
 			gamestate.PushChunks()
 
+			shoot.container.Same = false
+
 		}
 		shoot.HasFired = false
 	}
