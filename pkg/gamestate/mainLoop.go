@@ -1,4 +1,4 @@
-package gameloop
+package gamestate
 
 import (
 	"fmt"
@@ -6,16 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/objects"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
-
-var myScreen *elements.Element
-var IsServer = false
-
-func MakeScreen() {
-	myScreen = objects.NewScreen(-1280/2, -720/2)
-}
 
 //Update is the mainloop designed to be passed into an
 //ebiten run function. It is called every tick and thus
@@ -25,7 +16,7 @@ func Update(screen *ebiten.Image) error {
 		return nil
 	}
 
-	world := gamestate.GetEntireWorld()
+	world := GetEntireWorld()
 
 	myScreen.Update(-myScreen.XPos, -myScreen.YPos)
 	myScreen.Draw(screen, 0, 0)

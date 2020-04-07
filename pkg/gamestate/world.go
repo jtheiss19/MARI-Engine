@@ -18,11 +18,6 @@ func SendElem(conn net.Conn, elem *elements.Element) {
 	conn.Write(myMRP.MRPToByte())
 }
 
-func ForceUpdate(conn net.Conn) {
-	myMRP := mrp.NewMRP([]byte("END"), []byte(""), []byte(""))
-	conn.Write(myMRP.MRPToByte())
-}
-
 func NewConnection(conn net.Conn, ID int) {
 	connectionList[ID] = conn
 }
@@ -46,5 +41,4 @@ func SendElemMap(conn net.Conn) {
 		conn.Write(myMRP.MRPToByte())
 
 	}
-	ForceUpdate(conn)
 }

@@ -1,5 +1,0 @@
-package physics
-
-func Init() {
-
-}

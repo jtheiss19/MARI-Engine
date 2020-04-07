@@ -1,5 +1,0 @@
-package advancePos
-
-func Init() {
-
-}

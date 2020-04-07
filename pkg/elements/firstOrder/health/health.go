@@ -1,5 +1,0 @@
-package health
-
-func Init() {
-
-}

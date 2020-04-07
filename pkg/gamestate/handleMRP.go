@@ -43,10 +43,7 @@ func HandleMRP(mrpItem *mrp.MRP, conn net.Conn) {
 				}
 			}
 		} else {
-			AddUnitToWorld(finalElem)
-
-			PushChunks()
-
+			AddElemToChunk(finalElem, 0, 0)
 		}
 
 	case "REPLIC":
@@ -55,9 +52,6 @@ func HandleMRP(mrpItem *mrp.MRP, conn net.Conn) {
 
 	case "ID":
 		connection.SetID(mrpItem.GetBody())
-
-	case "END":
-		PushChunks()
 
 	default:
 		fmt.Println("Command Not Understood")

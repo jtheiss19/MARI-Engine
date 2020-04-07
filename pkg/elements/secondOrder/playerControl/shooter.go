@@ -85,7 +85,7 @@ func (shoot *Shooter) OnUpdateServer() error {
 	if shoot.HasFired {
 		if shoot.cooldown == 0 {
 			count++
-			shoot.cooldown = 0
+			shoot.cooldown = 15
 
 			myBullet := gamestate.GetObject("Bullet")
 			myBullet.UniqueName = "BULLET" + strconv.Itoa(count)
@@ -100,8 +100,7 @@ func (shoot *Shooter) OnUpdateServer() error {
 			myBullet.XPos = shoot.container.XPos + uX*70
 			myBullet.YPos = shoot.container.YPos + uY*70
 
-			gamestate.AddUnitToWorld(myBullet)
-			gamestate.PushChunks()
+			gamestate.AddElemToChunk(myBullet, 0, 0)
 
 			shoot.container.Same = false
 

@@ -1,5 +1,0 @@
-package attack
-
-func Init() {
-
-}

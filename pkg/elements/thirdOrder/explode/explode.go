@@ -4,11 +4,11 @@ import (
 	"net"
 
 	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/playerControl"
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
 
 	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/attack"
 	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/health"
 	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"

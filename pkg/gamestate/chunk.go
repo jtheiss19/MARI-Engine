@@ -9,67 +9,65 @@ import (
 	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
 )
 
-var ObjectMap = make(map[string]*elements.Element)
-
-type Chunk struct {
-	ChunkID          string
-	ChunkTerrainData []*elements.Element
-	ChunkUnitData    []*elements.Element
+func init() {
+	CreateChunk()
 }
 
+var ObjectMap = make(map[string]*elements.Element)
+var blacklistedNames []string
+var mu sync.Mutex
+
 var chunkList []*Chunk
-var chunkListTemp []*Chunk
+
+type Chunk struct {
+	ChunkID   string
+	ChunkData [][]*elements.Element
+}
+
+func CreateChunk() {
+	ID := strconv.Itoa(len(chunkList))
+	myNewChunk := &Chunk{ChunkID: ID}
+	myNewChunk.ChunkData = append(myNewChunk.ChunkData, []*elements.Element{})
+	chunkList = append(chunkList, myNewChunk)
+}
 
 func GetEntireWorld() []*elements.Element {
 	var masterMap = []*elements.Element{}
 
 	for _, chunk := range chunkList {
-
-		masterMap = append(masterMap, chunk.ChunkTerrainData...)
-		masterMap = append(masterMap, chunk.ChunkUnitData...)
+		for _, layer := range chunk.ChunkData {
+			masterMap = append(masterMap, layer...)
+		}
 	}
 
 	return masterMap
 }
 
-func CreateChunk() {
-	ID := strconv.Itoa(len(chunkListTemp))
-	chunkListTemp = append(chunkListTemp, &Chunk{ChunkID: ID})
-	chunkList = append(chunkList, &Chunk{ChunkID: ID})
+func GetEntireChunk(chunkID int) []*elements.Element {
+	var masterMap = []*elements.Element{}
+
+	for _, layer := range chunkList[chunkID].ChunkData {
+		masterMap = append(masterMap, layer...)
+	}
+
+	return masterMap
 }
 
-func AddUnitToWorld(elem *elements.Element) {
+func GetEntireChunkLayer(chunkID int, LayerID int) []*elements.Element {
+	var masterMap = []*elements.Element{}
 
-	if len(chunkListTemp) == 0 {
-		CreateChunk()
-	}
-	mu.Lock()
-	for _, name := range blacklistedNames {
-		if elem.UniqueName == name {
-			mu.Unlock()
-			return
-		}
-	}
-	mu.Unlock()
-	for _, unitElem := range chunkList[0].ChunkUnitData {
-		if unitElem.UniqueName == elem.UniqueName {
-			mu.Lock()
-			*unitElem = *elem
-			mu.Unlock()
-			return
-		}
-	}
+	masterMap = append(masterMap, chunkList[chunkID].ChunkData[LayerID]...)
 
-	mu.Lock()
-	chunkList[0].ChunkUnitData = append(chunkList[0].ChunkUnitData, elem)
-	mu.Unlock()
-
+	return masterMap
 }
 
-func AddTerrainToWorld(elem *elements.Element) {
-	if len(chunkListTemp) == 0 {
-		CreateChunk()
-	}
+func AddElemToChunk(elem *elements.Element, ChunkID int, PlaneToAdd int) {
+
+	//Temporary Overide to keep code crash proof
+	ChunkID = 0
+	PlaneToAdd = 0
+	//
+
 	mu.Lock()
 	for _, name := range blacklistedNames {
 		if elem.UniqueName == name {
@@ -79,7 +77,7 @@ func AddTerrainToWorld(elem *elements.Element) {
 	}
 	mu.Unlock()
 
-	for _, unitElem := range chunkList[0].ChunkTerrainData {
+	for _, unitElem := range chunkList[ChunkID].ChunkData[PlaneToAdd] {
 		if unitElem.UniqueName == elem.UniqueName {
 			mu.Lock()
 			*unitElem = *elem
@@ -89,8 +87,9 @@ func AddTerrainToWorld(elem *elements.Element) {
 	}
 
 	mu.Lock()
-	chunkList[0].ChunkTerrainData = append(chunkList[0].ChunkTerrainData, elem)
+	chunkList[ChunkID].ChunkData[PlaneToAdd] = append(chunkList[ChunkID].ChunkData[PlaneToAdd], elem)
 	mu.Unlock()
+
 }
 
 func GetObject(objectName string) *elements.Element {
@@ -104,13 +103,16 @@ func RemoveElem(badElem *elements.Element) {
 
 	myMRP := mrp.NewMRP([]byte("ELEM"), bytes, []byte("NIL"))
 
-	for k, existing := range chunkList[0].ChunkUnitData {
+	for k, existing := range chunkList[0].ChunkData[0] {
+		if badElem == nil || existing == nil {
+			break
+		}
 		if badElem.UniqueName == existing.UniqueName {
-			if k < len(chunkList[0].ChunkUnitData) {
-				copy(chunkList[0].ChunkUnitData[k:], chunkList[0].ChunkUnitData[k+1:])
+			if k < len(chunkList[0].ChunkData[0]) {
+				copy(chunkList[0].ChunkData[0][k:], chunkList[0].ChunkData[0][k+1:])
 			}
-			chunkList[0].ChunkUnitData[len(chunkList[0].ChunkUnitData)-1] = nil
-			chunkList[0].ChunkUnitData = chunkList[0].ChunkUnitData[:len(chunkList[0].ChunkUnitData)-1]
+			chunkList[0].ChunkData[0][len(chunkList[0].ChunkData[0])-1] = nil
+			chunkList[0].ChunkData[0] = chunkList[0].ChunkData[0][:len(chunkList[0].ChunkData[0])-1]
 
 		}
 	}
@@ -118,13 +120,4 @@ func RemoveElem(badElem *elements.Element) {
 	for _, conn := range connectionList {
 		conn.Write(myMRP.MRPToByte())
 	}
-}
-
-var blacklistedNames []string
-
-var mu sync.Mutex
-
-func PushChunks() {
-	mu.Lock()
-	mu.Unlock()
 }

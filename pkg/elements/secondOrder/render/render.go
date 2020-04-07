@@ -1,5 +1,0 @@
-package render
-
-func Init() {
-
-}

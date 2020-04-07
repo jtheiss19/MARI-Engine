@@ -1,5 +1,0 @@
-package explode
-
-func Init() {
-
-}
