@@ -1,4 +1,4 @@
-package playerControl
+package secondorder
 
 import (
 	"math"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
+	"github.com/jtheiss19/project-undying/pkg/elements/firstorder"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
 
@@ -33,7 +33,7 @@ func NewMoveTo(container *elements.Element, DestX float64, DestY float64) *MoveT
 	return &MoveTo{
 		container: container,
 		Type:      "MoveTo",
-		posData:   container.GetComponent(new(advancePos.AdvancePosition)),
+		posData:   container.GetComponent(new(firstorder.AdvancePosition)),
 		DestX:     DestX,
 		DestY:     DestY,
 	}
@@ -76,15 +76,15 @@ func (mov *MoveTo) OnUpdateServer() error {
 
 	UnitX := (mov.DestX - mov.container.XPos) / hypot
 	UnitY := (mov.DestY - mov.container.YPos) / hypot
-	mov.posData.(*advancePos.AdvancePosition).VX += mov.posData.(*advancePos.AdvancePosition).Speed * UnitX
-	mov.posData.(*advancePos.AdvancePosition).VY += mov.posData.(*advancePos.AdvancePosition).Speed * UnitY
+	mov.posData.(*firstorder.AdvancePosition).VX += mov.posData.(*firstorder.AdvancePosition).Speed * UnitX
+	mov.posData.(*firstorder.AdvancePosition).VY += mov.posData.(*firstorder.AdvancePosition).Speed * UnitY
 
 	return nil
 }
 
 func (mov *MoveTo) SetContainer(container *elements.Element) error {
 	mov.container = container
-	mov.posData = container.GetComponent(new(advancePos.AdvancePosition))
+	mov.posData = container.GetComponent(new(firstorder.AdvancePosition))
 	return nil
 }
 

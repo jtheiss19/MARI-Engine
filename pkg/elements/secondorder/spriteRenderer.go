@@ -1,14 +1,13 @@
-package render
+package secondorder
 
 import (
 	"log"
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
-
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
 
 //SpriteRenderer is the component that handles all

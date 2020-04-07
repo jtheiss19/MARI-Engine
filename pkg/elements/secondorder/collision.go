@@ -1,10 +1,10 @@
-package physics
+package secondorder
 
 import (
 	"math"
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
+	"github.com/jtheiss19/project-undying/pkg/elements/firstorder"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 
 	"github.com/hajimehoshi/ebiten"
@@ -33,7 +33,7 @@ func NewCollider(container *elements.Element) *Collider {
 	return &Collider{
 		container:   container,
 		Type:        "Collider",
-		posData:     container.GetComponent(new(advancePos.AdvancePosition)),
+		posData:     container.GetComponent(new(firstorder.AdvancePosition)),
 		Radius:      50,
 		HasCollided: false,
 	}
@@ -71,8 +71,8 @@ func (coli *Collider) OnUpdateServer() error {
 		if elem.GetComponent(coli) != nil && elem.UniqueName != coli.container.UniqueName {
 			elemComp := elem.GetComponent(coli)
 			if isCollison(elemComp.(*Collider), coli) {
-				coli.container.XPos = coli.posData.(*advancePos.AdvancePosition).PrevX
-				coli.container.YPos = coli.posData.(*advancePos.AdvancePosition).PrevY
+				coli.container.XPos = coli.posData.(*firstorder.AdvancePosition).PrevX
+				coli.container.YPos = coli.posData.(*firstorder.AdvancePosition).PrevY
 				coli.HasCollided = true
 				coli.objectsHit = append(coli.objectsHit, elem)
 			}
@@ -104,7 +104,7 @@ func isCollison(coli1, coli2 *Collider) bool {
 
 func (coli *Collider) SetContainer(container *elements.Element) error {
 	coli.container = container
-	coli.posData = container.GetComponent(new(advancePos.AdvancePosition))
+	coli.posData = container.GetComponent(new(firstorder.AdvancePosition))
 	return nil
 }
 

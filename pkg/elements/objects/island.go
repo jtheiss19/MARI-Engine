@@ -2,8 +2,7 @@ package objects
 
 import (
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/render"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondorder"
 )
 
 func NewIsland(xpos float64, ypos float64, Name string) *elements.Element {
@@ -16,10 +15,10 @@ func NewIsland(xpos float64, ypos float64, Name string) *elements.Element {
 
 	Island.UniqueName = Name
 
-	sr := render.NewSpriteRenderer(Island, "island.png")
+	sr := secondorder.NewSpriteRenderer(Island, "island.png")
 	Island.AddComponent(sr)
 
-	coli := physics.NewCollider(Island)
+	coli := secondorder.NewCollider(Island)
 	coli.Radius = 25
 	Island.AddComponent(coli)
 

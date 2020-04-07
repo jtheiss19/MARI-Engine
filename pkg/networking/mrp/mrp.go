@@ -46,7 +46,6 @@ func ReadMRPFromBytes(packet []byte) (*MRP, error) {
 func ReadMRPFromConn(conn net.Conn, handleMRP func(*MRP, net.Conn)) {
 	var err error
 	var carryOver []byte
-	var count int
 
 	for {
 		var message = make([]byte, 0)
@@ -92,10 +91,6 @@ func ReadMRPFromConn(conn net.Conn, handleMRP func(*MRP, net.Conn)) {
 			newMRP, err = ReadMRPFromBytes([]byte(v))
 			if err == nil {
 				go handleMRP(newMRP, conn)
-				count++
-				if count%100 == 0 {
-					fmt.Println(count)
-				}
 			} else {
 				carryOver = message[len(message)-len(v):]
 				break

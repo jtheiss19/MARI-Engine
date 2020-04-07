@@ -2,7 +2,7 @@ package objects
 
 import (
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/render"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondorder"
 )
 
 func NewWater(xpos float64, ypos float64, Name string) *elements.Element {
@@ -15,7 +15,7 @@ func NewWater(xpos float64, ypos float64, Name string) *elements.Element {
 
 	water.UniqueName = Name
 
-	sr := render.NewSpriteRenderer(water, "water.png")
+	sr := secondorder.NewSpriteRenderer(water, "water.png")
 	water.AddComponent(sr)
 
 	return water

@@ -2,7 +2,7 @@ package objects
 
 import (
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/playerControl"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondorder"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
 )
 
@@ -17,7 +17,7 @@ func NewScreen(xpos float64, ypos float64) *elements.Element {
 	screen.UniqueName = "MySpecialScreen"
 	screen.ID = connection.GetID()
 
-	mover := playerControl.NewKeyboardMover(screen, 1)
+	mover := secondorder.NewKeyboardMover(screen, 1)
 	screen.AddComponent(mover)
 
 	return screen

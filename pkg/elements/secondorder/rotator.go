@@ -1,4 +1,4 @@
-package render
+package secondorder
 
 import (
 	"math"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
+	"github.com/jtheiss19/project-undying/pkg/elements/firstorder"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
 
@@ -31,7 +31,7 @@ func NewRotator(container *elements.Element) *Rotator {
 
 	return &Rotator{
 		container: container,
-		posData:   container.GetComponent(new(advancePos.AdvancePosition)),
+		posData:   container.GetComponent(new(firstorder.AdvancePosition)),
 		Type:      "Rotator",
 	}
 }
@@ -61,10 +61,10 @@ func (rot *Rotator) OnMerge(compM elements.Component) error {
 
 func (rot *Rotator) OnUpdateServer() error {
 
-	if rot.container.YPos == rot.posData.(*advancePos.AdvancePosition).PrevY && rot.container.XPos == rot.posData.(*advancePos.AdvancePosition).PrevX {
-	} else if rot.posData.(*advancePos.AdvancePosition).PrevY == 0 || rot.posData.(*advancePos.AdvancePosition).PrevX == 0 {
+	if rot.container.YPos == rot.posData.(*firstorder.AdvancePosition).PrevY && rot.container.XPos == rot.posData.(*firstorder.AdvancePosition).PrevX {
+	} else if rot.posData.(*firstorder.AdvancePosition).PrevY == 0 || rot.posData.(*firstorder.AdvancePosition).PrevX == 0 {
 	} else {
-		rot.container.Rotation = math.Atan2((rot.container.YPos - rot.posData.(*advancePos.AdvancePosition).PrevY), (rot.container.XPos - rot.posData.(*advancePos.AdvancePosition).PrevX))
+		rot.container.Rotation = math.Atan2((rot.container.YPos - rot.posData.(*firstorder.AdvancePosition).PrevY), (rot.container.XPos - rot.posData.(*firstorder.AdvancePosition).PrevX))
 	}
 
 	return nil

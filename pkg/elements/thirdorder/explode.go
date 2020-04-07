@@ -1,14 +1,12 @@
-package explode
+package thirdorder
 
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/playerControl"
 	"github.com/jtheiss19/project-undying/pkg/gamestate"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/attack"
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/health"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
+	"github.com/jtheiss19/project-undying/pkg/elements/firstorder"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondorder"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
@@ -35,8 +33,8 @@ func NewExplosion(container *elements.Element) *Explosion {
 	return &Explosion{
 		container: container,
 		Type:      "Explosion",
-		coliData:  container.GetComponent(new(physics.Collider)),
-		damData:   container.GetComponent(new(attack.Damage)),
+		coliData:  container.GetComponent(new(secondorder.Collider)),
+		damData:   container.GetComponent(new(firstorder.Damage)),
 	}
 }
 
@@ -57,18 +55,18 @@ func (explo *Explosion) OnCheck(elemC *elements.Element) error {
 }
 
 func (explo *Explosion) OnUpdateServer() error {
-	if explo.coliData.(*physics.Collider).HasCollided {
-		for _, elem := range explo.coliData.(*physics.Collider).GetObjectsHit() {
-			elemHP := elem.GetComponent(new(health.Health))
+	if explo.coliData.(*secondorder.Collider).HasCollided {
+		for _, elem := range explo.coliData.(*secondorder.Collider).GetObjectsHit() {
+			elemHP := elem.GetComponent(new(firstorder.Health))
 			if elemHP != nil && explo.damData != nil {
-				elemHP.(*health.Health).TakeDamage(explo.damData.(*attack.Damage).Attack)
+				elemHP.(*firstorder.Health).TakeDamage(explo.damData.(*firstorder.Damage).Attack)
 			}
 		}
 
 		gamestate.RemoveElem(explo.container)
 	}
 
-	if explo.container.GetComponent(new(playerControl.MoveTo)) == nil {
+	if explo.container.GetComponent(new(secondorder.MoveTo)) == nil {
 		gamestate.RemoveElem(explo.container)
 	}
 	return nil
@@ -76,8 +74,8 @@ func (explo *Explosion) OnUpdateServer() error {
 
 func (explo *Explosion) SetContainer(container *elements.Element) error {
 	explo.container = container
-	explo.coliData = container.GetComponent(new(physics.Collider))
-	explo.damData = container.GetComponent(new(attack.Damage))
+	explo.coliData = container.GetComponent(new(secondorder.Collider))
+	explo.damData = container.GetComponent(new(firstorder.Damage))
 	return nil
 }
 

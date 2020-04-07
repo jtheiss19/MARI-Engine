@@ -1,9 +1,9 @@
-package playerControl
+package secondorder
 
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
+	"github.com/jtheiss19/project-undying/pkg/elements/firstorder"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/jtheiss19/project-undying/pkg/elements"
@@ -30,7 +30,7 @@ func init() {
 func NewKeyboardMover(container *elements.Element, speed float64) *KeyboardMover {
 	return &KeyboardMover{
 		container: container,
-		posData:   container.GetComponent(new(advancePos.AdvancePosition)),
+		posData:   container.GetComponent(new(firstorder.AdvancePosition)),
 		Speed:     speed,
 		Type:      "KeyboardMover",
 	}
@@ -54,19 +54,19 @@ func (mover *KeyboardMover) OnUpdate(xOffset float64, yOffset float64) error {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		mover.posData.(*advancePos.AdvancePosition).VX += -mover.posData.(*advancePos.AdvancePosition).Speed
+		mover.posData.(*firstorder.AdvancePosition).VX += -mover.posData.(*firstorder.AdvancePosition).Speed
 		mover.container.Same = false
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		mover.posData.(*advancePos.AdvancePosition).VX += mover.posData.(*advancePos.AdvancePosition).Speed
+		mover.posData.(*firstorder.AdvancePosition).VX += mover.posData.(*firstorder.AdvancePosition).Speed
 		mover.container.Same = false
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		mover.posData.(*advancePos.AdvancePosition).VY += -mover.posData.(*advancePos.AdvancePosition).Speed
+		mover.posData.(*firstorder.AdvancePosition).VY += -mover.posData.(*firstorder.AdvancePosition).Speed
 		mover.container.Same = false
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		mover.posData.(*advancePos.AdvancePosition).VY += mover.posData.(*advancePos.AdvancePosition).Speed
+		mover.posData.(*firstorder.AdvancePosition).VY += mover.posData.(*firstorder.AdvancePosition).Speed
 		mover.container.Same = false
 	}
 
@@ -87,7 +87,7 @@ func (mover *KeyboardMover) OnMerge(compM elements.Component) error {
 
 func (mover *KeyboardMover) SetContainer(container *elements.Element) error {
 	mover.container = container
-	mover.posData = container.GetComponent(new(advancePos.AdvancePosition))
+	mover.posData = container.GetComponent(new(firstorder.AdvancePosition))
 	return nil
 }
 

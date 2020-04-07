@@ -3,17 +3,11 @@ package objects
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
-
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/advancePos"
-	"github.com/jtheiss19/project-undying/pkg/elements/firstOrder/attack"
-	"github.com/jtheiss19/project-undying/pkg/elements/thirdOrder/explode"
-
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/physics"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/playerControl"
-
 	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondOrder/render"
+	"github.com/jtheiss19/project-undying/pkg/elements/firstorder"
+	"github.com/jtheiss19/project-undying/pkg/elements/secondorder"
+	"github.com/jtheiss19/project-undying/pkg/elements/thirdorder"
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
 
 func init() {
@@ -32,32 +26,32 @@ func NewBullet(conn net.Conn, DestX, DestY float64) *elements.Element {
 
 	//--FIRST ORDER--------------------------------------------//
 
-	aPos := advancePos.NewAdvancePosition(bullet, 5)
+	aPos := firstorder.NewAdvancePosition(bullet, 5)
 	bullet.AddComponent(aPos)
 
-	dam := attack.NewDamage(bullet)
+	dam := firstorder.NewDamage(bullet)
 	bullet.AddComponent(dam)
 
 	//--SECOND ORDER-------------------------------------------//
 
-	sr := render.NewSpriteRenderer(bullet, "carrier.png")
+	sr := secondorder.NewSpriteRenderer(bullet, "carrier.png")
 	bullet.AddComponent(sr)
 
-	rot := render.NewRotator(bullet)
+	rot := secondorder.NewRotator(bullet)
 	bullet.AddComponent(rot)
 
-	coli := physics.NewCollider(bullet)
+	coli := secondorder.NewCollider(bullet)
 	bullet.AddComponent(coli)
 
-	mov := playerControl.NewMoveTo(bullet, -400, -400)
+	mov := secondorder.NewMoveTo(bullet, -400, -400)
 	bullet.AddComponent(mov)
 
 	//--THIRD ORDER--------------------------------------------//
 
-	explo := explode.NewExplosion(bullet)
+	explo := thirdorder.NewExplosion(bullet)
 	bullet.AddComponent(explo)
 
-	replic := playerControl.NewReplicator(bullet, conn)
+	replic := secondorder.NewReplicator(bullet, conn)
 	bullet.AddComponent(replic)
 
 	return bullet

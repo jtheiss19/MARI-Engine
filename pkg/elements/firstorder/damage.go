@@ -1,4 +1,4 @@
-package attack
+package firstorder
 
 import (
 	"net"
