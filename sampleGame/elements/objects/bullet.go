@@ -43,9 +43,6 @@ func NewBullet(conn net.Conn, DestX, DestY float64) *elements.Element {
 	coli := secondorder.NewCollider(bullet)
 	bullet.AddComponent(coli)
 
-	mov := secondorder.NewMoveTo(bullet, -400, -400)
-	bullet.AddComponent(mov)
-
 	//--THIRD ORDER--------------------------------------------//
 
 	explo := thirdorder.NewExplosion(bullet)
