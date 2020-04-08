@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jtheiss19/MARI-Engine/mariengine/gamestate"
+	"github.com/jtheiss19/MARI-Engine/gamestate"
 	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/objects"
 	"github.com/jtheiss19/MARI-Engine/sampleGame/gamemap"
 )

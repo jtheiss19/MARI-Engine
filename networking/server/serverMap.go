@@ -3,7 +3,7 @@ package server
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
+	"github.com/jtheiss19/MARI-Engine/networking/mrp"
 )
 
 var spawingFunction func(conn net.Conn, ID string)

@@ -3,10 +3,9 @@ package sample
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
-
 	"github.com/hajimehoshi/ebiten"
-	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/MARI-Engine/elements"
+	"github.com/jtheiss19/MARI-Engine/gamestate"
 )
 
 type MyComp struct {

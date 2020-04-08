@@ -3,11 +3,11 @@ package objects
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/firstorder"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondorder"
-	"github.com/jtheiss19/project-undying/pkg/elements/thirdorder"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
+	"github.com/jtheiss19/MARI-Engine/elements"
+	"github.com/jtheiss19/MARI-Engine/gamestate"
+	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/firstorder"
+	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/secondorder"
+	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/thirdorder"
 )
 
 func init() {

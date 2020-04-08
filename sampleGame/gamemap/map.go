@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"strconv"
 
-	"github.com/jtheiss19/MARI-Engine/mariengine/gamestate"
+	"github.com/jtheiss19/MARI-Engine/gamestate"
 	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/objects"
 )
 

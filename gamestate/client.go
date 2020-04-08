@@ -4,9 +4,8 @@ import (
 	"log"
 
 	"github.com/hajimehoshi/ebiten"
-
-	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/networking/connection"
+	"github.com/jtheiss19/MARI-Engine/elements"
+	"github.com/jtheiss19/MARI-Engine/networking/connection"
 )
 
 var (

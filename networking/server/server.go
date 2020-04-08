@@ -3,7 +3,7 @@ package server
 import (
 	"time"
 
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
+	"github.com/jtheiss19/MARI-Engine/gamestate"
 )
 
 const tps = 60

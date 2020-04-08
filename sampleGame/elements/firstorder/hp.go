@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/jtheiss19/MARI-Engine/pkg/gamestate"
-	"github.com/jtheiss19/MARI-Engine/pkg/networking/connection"
-
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/jtheiss19/MARI-Engine/pkg/elements"
+	"github.com/jtheiss19/MARI-Engine/elements"
+	"github.com/jtheiss19/MARI-Engine/gamestate"
+	"github.com/jtheiss19/MARI-Engine/networking/connection"
 )
 
 //AdvancePosition is the component that handles all

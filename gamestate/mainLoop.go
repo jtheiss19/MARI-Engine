@@ -5,7 +5,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/MARI-Engine/elements"
 )
 
 //Update is the mainloop designed to be passed into an

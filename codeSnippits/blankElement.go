@@ -1,8 +1,8 @@
 package sample
 
 import (
-	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
+	"github.com/jtheiss19/MARI-Engine/elements"
+	"github.com/jtheiss19/MARI-Engine/gamestate"
 )
 
 func init() {

@@ -7,9 +7,9 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/networking/connection"
-	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
+	"github.com/jtheiss19/MARI-Engine/elements"
+	"github.com/jtheiss19/MARI-Engine/networking/connection"
+	"github.com/jtheiss19/MARI-Engine/networking/mrp"
 )
 
 var serverConnection net.Conn

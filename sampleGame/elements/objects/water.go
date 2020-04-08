@@ -1,8 +1,8 @@
 package objects
 
 import (
-	"github.com/jtheiss19/project-undying/pkg/elements"
-	"github.com/jtheiss19/project-undying/pkg/elements/secondorder"
+	"github.com/jtheiss19/MARI-Engine/elements"
+	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/secondorder"
 )
 
 func NewWater(xpos float64, ypos float64, Name string) *elements.Element {
