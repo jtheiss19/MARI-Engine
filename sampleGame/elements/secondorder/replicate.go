@@ -17,7 +17,6 @@ type Replicator struct {
 	container *elements.Element
 	conn      net.Conn
 	Type      string
-	count     int
 }
 
 func init() {
@@ -71,19 +70,10 @@ func (replic *Replicator) OnCheck(elemC *elements.Element) error {
 
 func (replic *Replicator) OnUpdateServer() error {
 
-	if replic.count == 100 && !replic.container.Same {
-
-		go gamestate.UpdateElemToAll(replic.container, 4) // Temporary plane
-
-		replic.count = 0
+	if !replic.container.Same {
+		go gamestate.UpdateElemToAll(replic.container, replic.container.Layer)
 		replic.container.Same = true
-
-	} else if replic.count == 100 {
-
-		replic.count = 0
 	}
-
-	replic.count++
 
 	return nil
 }

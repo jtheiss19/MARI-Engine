@@ -72,6 +72,8 @@ func AddElemToChunk(elem *elements.Element, ChunkID int, PlaneToAdd int) {
 		}
 	}
 
+	elem.Layer = PlaneToAdd
+
 	mu.Lock()
 	for _, name := range blacklistedNames {
 		if elem.UniqueName == name {
@@ -107,17 +109,16 @@ func RemoveElem(badElem *elements.Element) {
 
 	myMRP := mrp.NewMRP([]byte("ELEM"), bytes, []byte("NIL"))
 
-	for k, existing := range chunkList[0].ChunkData[0] {
+	for k, existing := range chunkList[0].ChunkData[badElem.Layer] {
 		if badElem == nil || existing == nil {
 			break
 		}
 		if badElem.UniqueName == existing.UniqueName {
-			if k < len(chunkList[0].ChunkData[0]) {
-				copy(chunkList[0].ChunkData[0][k:], chunkList[0].ChunkData[0][k+1:])
+			if k < len(chunkList[0].ChunkData[badElem.Layer]) {
+				copy(chunkList[0].ChunkData[badElem.Layer][k:], chunkList[0].ChunkData[badElem.Layer][k+1:])
 			}
-			chunkList[0].ChunkData[0][len(chunkList[0].ChunkData[0])-1] = nil
-			chunkList[0].ChunkData[0] = chunkList[0].ChunkData[0][:len(chunkList[0].ChunkData[0])-1]
-
+			chunkList[0].ChunkData[badElem.Layer][len(chunkList[0].ChunkData[badElem.Layer])-1] = nil
+			chunkList[0].ChunkData[badElem.Layer] = chunkList[0].ChunkData[badElem.Layer][:len(chunkList[0].ChunkData[badElem.Layer])-1]
 		}
 	}
 

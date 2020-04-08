@@ -9,8 +9,8 @@ import (
 const (
 	screenWidth  = 1280
 	screenHeight = 720
-	screenScale  = 1
-	addr         = "" //set to "" to launch game in single player
+	screenScale  = 0.75
+	addr         = "localhost:8080" //set to "" to launch game in single player
 )
 
 func main() {

@@ -15,6 +15,8 @@ var (
 	addr         = ""
 )
 
+var isServer = false
+
 var myScreen *elements.Element
 
 func SetScreen(screen *elements.Element) {
@@ -39,6 +41,7 @@ func StartClient() {
 	if addr != "" {
 		Dial(addr)
 	} else {
+		isServer = true
 		connection.SetID("0")
 	}
 

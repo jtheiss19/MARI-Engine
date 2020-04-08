@@ -32,7 +32,9 @@ func Update(screen *ebiten.Image) error {
 						fmt.Println("updating element:", err)
 					}
 
-					go elem.UpdateServer()
+					if isServer {
+						go elem.UpdateServer()
+					}
 
 					err = elem.Draw(screen, -myScreen.XPos, -myScreen.YPos)
 					if err != nil {

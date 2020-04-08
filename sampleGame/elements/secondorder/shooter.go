@@ -19,7 +19,7 @@ type Shooter struct {
 	HasFired  bool
 	DestX     float64
 	DestY     float64
-	cooldown  int
+	Cooldown  int
 }
 
 func init() {
@@ -34,7 +34,7 @@ func NewShooter(container *elements.Element) *Shooter {
 	return &Shooter{
 		container: container,
 		Type:      "Shooter",
-		cooldown:  0,
+		Cooldown:  0,
 		HasFired:  false,
 	}
 }
@@ -54,15 +54,17 @@ func (shoot *Shooter) OnDraw(screen *ebiten.Image, xOffset float64, yOffset floa
 //with a connection. On clients init the objects with a
 //connection.
 func (shoot *Shooter) OnUpdate(xOffset float64, yOffset float64) error {
-	if shoot.HasFired == true || shoot.container.ID != connection.GetID() {
+	if shoot.container.ID != connection.GetID() {
 		return nil
 	}
 
-	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) && shoot.Cooldown == 0 {
+		shoot.container.Same = false
 		shoot.HasFired = true
 		w, h := ebiten.CursorPosition()
 		shoot.DestX = float64(w) - xOffset
 		shoot.DestY = float64(h) - yOffset
+
 	}
 	return nil
 }
@@ -81,11 +83,11 @@ func (shoot *Shooter) OnMerge(compM elements.Component) error {
 var count int
 
 func (shoot *Shooter) OnUpdateServer() error {
-
 	if shoot.HasFired {
-		if shoot.cooldown == 0 {
+		if shoot.Cooldown == 0 {
+
 			count++
-			shoot.cooldown = 15
+			shoot.Cooldown = 15
 
 			myBullet := gamestate.GetObject("Bullet")
 			myBullet.UniqueName = "BULLET" + strconv.Itoa(count)
@@ -100,16 +102,15 @@ func (shoot *Shooter) OnUpdateServer() error {
 			myBullet.XPos = shoot.container.XPos + uX*70
 			myBullet.YPos = shoot.container.YPos + uY*70
 
-			gamestate.AddElemToChunk(myBullet, 0, 0)
+			gamestate.AddElemToChunk(myBullet, 0, 3)
 
 			shoot.container.Same = false
-
 		}
 		shoot.HasFired = false
 	}
 
-	if shoot.cooldown > 0 {
-		shoot.cooldown -= 1
+	if shoot.Cooldown > 0 {
+		shoot.Cooldown -= 1
 	}
 
 	return nil
