@@ -26,9 +26,13 @@ func StartServer(port string) {
 
 		world := gamestate.GetEntireWorld()
 
-		for _, elem := range world {
-			if elem.Active {
-				elem.UpdateServer()
+		for _, layer := range world {
+			for _, elem := range layer {
+				if elem != nil {
+					if elem.Active {
+						elem.UpdateServer()
+					}
+				}
 			}
 		}
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strconv"
 
 	"github.com/jtheiss19/project-undying/pkg/elements"
 	"github.com/jtheiss19/project-undying/pkg/networking/connection"
@@ -35,15 +36,21 @@ func HandleMRP(mrpItem *mrp.MRP, conn net.Conn) {
 		handleELEMCreates(bytesMaster, finalElem)
 
 		if mrpItem.GetFooters()[0] == "NIL" {
-			for _, elem := range GetEntireWorld() {
-				if elem.UniqueName == finalElem.UniqueName {
-					blacklistedNames = append(blacklistedNames, elem.UniqueName)
-					RemoveElem(elem)
-					break
+			for _, layer := range GetEntireWorld() {
+				for _, elem := range layer {
+					if elem.UniqueName == finalElem.UniqueName {
+						blacklistedNames = append(blacklistedNames, elem.UniqueName)
+						RemoveElem(elem)
+						break
+					}
 				}
 			}
 		} else {
-			AddElemToChunk(finalElem, 0, 0)
+			layerToAddOn, err := strconv.Atoi(mrpItem.GetFooters()[0])
+			if err != nil {
+				log.Fatal(err)
+			}
+			AddElemToChunk(finalElem, 0, layerToAddOn)
 		}
 
 	case "REPLIC":
@@ -84,17 +91,19 @@ func handleELEMCreates(bytesMaster []byte, finalElem *elements.Element) {
 	json.Unmarshal(bytesMaster, &finalElem)
 }
 
-func handleREPLIC(mrpItem *mrp.MRP, conn net.Conn, world []*elements.Element) {
-	for _, elem := range world {
-		if elem.UniqueName == mrpItem.GetFooters()[0] {
-			var elemTemp = new(elements.Element)
-			handleELEMCreates([]byte(mrpItem.GetBody()), elemTemp)
+func handleREPLIC(mrpItem *mrp.MRP, conn net.Conn, world [][]*elements.Element) {
+	for _, layer := range world {
+		for _, elem := range layer {
+			if elem.UniqueName == mrpItem.GetFooters()[0] {
+				var elemTemp = new(elements.Element)
+				handleELEMCreates([]byte(mrpItem.GetBody()), elemTemp)
 
-			if elem.Check(elemTemp) == nil {
-				elemTemp.Merge(elem)
+				if elem.Check(elemTemp) == nil {
+					elemTemp.Merge(elem)
+				}
+
+				break
 			}
-
-			break
 		}
 	}
 

@@ -1,9 +1,8 @@
-package objects
+package sample
 
 import (
-	"net"
-
 	"github.com/jtheiss19/project-undying/pkg/elements"
+	"github.com/jtheiss19/project-undying/pkg/gamestate"
 )
 
 func init() {

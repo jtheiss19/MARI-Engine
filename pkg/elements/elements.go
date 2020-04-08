@@ -35,6 +35,7 @@ type Element struct {
 	ID         string
 	Components []Component
 	Same       bool
+	Layer      int
 }
 
 //Draw loops through all components within the element
@@ -162,9 +163,13 @@ func (elem *Element) RemoveComponentType(badComp Component) {
 //nil if the component does not exist
 func (elem *Element) GetComponent(withType Component) Component {
 	typ := reflect.TypeOf(withType)
-	for _, comp := range elem.Components {
-		if reflect.TypeOf(comp) == typ {
-			return comp
+	if elem != nil {
+		for _, comp := range elem.Components {
+
+			if reflect.TypeOf(comp) == typ {
+				return comp
+			}
+
 		}
 	}
 

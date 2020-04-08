@@ -3,20 +3,20 @@ package server
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/objects"
-
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
 	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
 )
+
+var spawingFunction func(conn net.Conn, ID string)
 
 func sendSessionID(conn net.Conn, ID string) {
 	myMRP := mrp.NewMRP([]byte("ID"), []byte(ID), []byte(""))
 	conn.Write(myMRP.MRPToByte())
 }
 
-func spawnStarterShip(conn net.Conn, ID string) {
-	newPlayer := objects.NewPlayer(conn)
-	newPlayer.ID = ID
-	newPlayer.UniqueName = newPlayer.UniqueName + ID
-	gamestate.AddElemToChunk(newPlayer, 0, 0)
+func onSpawn(conn net.Conn, ID string) {
+	spawingFunction(conn, ID)
+}
+
+func SetSpawnFunction(newSpawnFunction func(conn net.Conn, ID string)) {
+	spawingFunction = newSpawnFunction
 }

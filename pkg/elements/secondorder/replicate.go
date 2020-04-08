@@ -73,7 +73,7 @@ func (replic *Replicator) OnUpdateServer() error {
 
 	if replic.count == 100 && !replic.container.Same {
 
-		go gamestate.UpdateElemToAll(replic.container)
+		go gamestate.UpdateElemToAll(replic.container, 4) // Temporary plane
 
 		replic.count = 0
 		replic.container.Same = true

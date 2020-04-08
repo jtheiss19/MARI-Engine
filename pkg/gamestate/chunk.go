@@ -27,28 +27,26 @@ type Chunk struct {
 func CreateChunk() {
 	ID := strconv.Itoa(len(chunkList))
 	myNewChunk := &Chunk{ChunkID: ID}
-	myNewChunk.ChunkData = append(myNewChunk.ChunkData, []*elements.Element{})
+	myNewChunk.ChunkData = [][]*elements.Element{}
 	chunkList = append(chunkList, myNewChunk)
 }
 
-func GetEntireWorld() []*elements.Element {
-	var masterMap = []*elements.Element{}
+func GetEntireWorld() [][]*elements.Element {
+	var masterMap = [][]*elements.Element{}
 
 	for _, chunk := range chunkList {
 		for _, layer := range chunk.ChunkData {
-			masterMap = append(masterMap, layer...)
+			masterMap = append(masterMap, layer)
 		}
 	}
 
 	return masterMap
 }
 
-func GetEntireChunk(chunkID int) []*elements.Element {
-	var masterMap = []*elements.Element{}
+func GetEntireChunk(chunkID int) [][]*elements.Element {
+	var masterMap = [][]*elements.Element{}
 
-	for _, layer := range chunkList[chunkID].ChunkData {
-		masterMap = append(masterMap, layer...)
-	}
+	masterMap = chunkList[chunkID].ChunkData
 
 	return masterMap
 }
@@ -56,17 +54,27 @@ func GetEntireChunk(chunkID int) []*elements.Element {
 func GetEntireChunkLayer(chunkID int, LayerID int) []*elements.Element {
 	var masterMap = []*elements.Element{}
 
-	masterMap = append(masterMap, chunkList[chunkID].ChunkData[LayerID]...)
+	masterMap = chunkList[chunkID].ChunkData[LayerID]
 
 	return masterMap
 }
 
 func AddElemToChunk(elem *elements.Element, ChunkID int, PlaneToAdd int) {
+	for {
+		if ChunkID >= len(chunkList) {
+			CreateChunk()
+		} else {
+			break
+		}
+	}
 
-	//Temporary Overide to keep code crash proof
-	ChunkID = 0
-	PlaneToAdd = 0
-	//
+	for {
+		if PlaneToAdd >= len(chunkList[ChunkID].ChunkData) {
+			chunkList[ChunkID].ChunkData = append(chunkList[ChunkID].ChunkData, []*elements.Element{})
+		} else {
+			break
+		}
+	}
 
 	mu.Lock()
 	for _, name := range blacklistedNames {

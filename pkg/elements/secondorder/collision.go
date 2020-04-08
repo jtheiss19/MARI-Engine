@@ -67,14 +67,16 @@ func (coli *Collider) OnUpdateServer() error {
 	coli.HasCollided = false
 	coli.objectsHit = []*elements.Element{}
 
-	for _, elem := range gamestate.GetEntireWorld() {
-		if elem.GetComponent(coli) != nil && elem.UniqueName != coli.container.UniqueName {
-			elemComp := elem.GetComponent(coli)
-			if isCollison(elemComp.(*Collider), coli) {
-				coli.container.XPos = coli.posData.(*firstorder.AdvancePosition).PrevX
-				coli.container.YPos = coli.posData.(*firstorder.AdvancePosition).PrevY
-				coli.HasCollided = true
-				coli.objectsHit = append(coli.objectsHit, elem)
+	for _, layer := range gamestate.GetEntireWorld() {
+		for _, elem := range layer {
+			if elem.GetComponent(coli) != nil && elem.UniqueName != coli.container.UniqueName {
+				elemComp := elem.GetComponent(coli)
+				if isCollison(elemComp.(*Collider), coli) {
+					coli.container.XPos = coli.posData.(*firstorder.AdvancePosition).PrevX
+					coli.container.YPos = coli.posData.(*firstorder.AdvancePosition).PrevY
+					coli.HasCollided = true
+					coli.objectsHit = append(coli.objectsHit, elem)
+				}
 			}
 		}
 	}

@@ -25,6 +25,7 @@ func (comp *MyComp) MRP(finalElem *elements.Element, conn net.Conn) {
 }
 
 func NewMyComp(container *elements.Element) *MyComp {
+
 	return &MyComp{
 		container: container,
 		Type:      "MyComp",

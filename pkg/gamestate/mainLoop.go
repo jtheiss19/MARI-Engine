@@ -22,24 +22,28 @@ func Update(screen *ebiten.Image) error {
 	myScreen.Draw(screen, 0, 0)
 
 	tileCount := 0
-	for _, elem := range world {
-		if elem.Active && canView(elem, screen) {
+	for _, layer := range world {
+		for _, elem := range layer {
+			if elem != nil {
+				if elem.Active && canView(elem, screen) {
 
-			err := elem.Update(-myScreen.XPos, -myScreen.YPos)
-			if err != nil {
-				fmt.Println("updating element:", err)
+					err := elem.Update(-myScreen.XPos, -myScreen.YPos)
+					if err != nil {
+						fmt.Println("updating element:", err)
+					}
+
+					go elem.UpdateServer()
+
+					err = elem.Draw(screen, -myScreen.XPos, -myScreen.YPos)
+					if err != nil {
+						fmt.Println("drawing element:", elem)
+						return nil
+					}
+
+				}
+				tileCount++
 			}
-
-			go elem.UpdateServer()
-
-			err = elem.Draw(screen, -myScreen.XPos, -myScreen.YPos)
-			if err != nil {
-				fmt.Println("drawing element:", elem)
-				return nil
-			}
-
 		}
-		tileCount++
 	}
 
 	msg := fmt.Sprintf(" TPS: %0.2f \n FPS: %0.2f \n Number of Things Drawn: %d", ebiten.CurrentTPS(), ebiten.CurrentFPS(), tileCount)

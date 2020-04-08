@@ -18,7 +18,7 @@ func NewWorld() {
 			gamestate.AddElemToChunk(myWater, 0, 0)
 			if rand.Intn(20) <= 0 {
 				myIsland := objects.NewIsland(float64(x*64), float64(y*64), strconv.Itoa(x)+","+strconv.Itoa(y)+" ")
-				gamestate.AddElemToChunk(myIsland, 0, 0)
+				gamestate.AddElemToChunk(myIsland, 0, 1)
 			}
 		}
 	}

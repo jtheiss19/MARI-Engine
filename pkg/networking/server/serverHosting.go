@@ -47,7 +47,7 @@ func session(ln net.Listener, newConnSignal chan string, sessionID int) {
 	go mrp.ReadMRPFromConn(conn, gamestate.HandleMRP)
 
 	gamestate.SendElemMap(conn)
-	spawnStarterShip(conn, strconv.Itoa(sessionID))
+	onSpawn(conn, strconv.Itoa(sessionID))
 
 	closeConnection := make(chan string)
 	fmt.Println(<-closeConnection)
