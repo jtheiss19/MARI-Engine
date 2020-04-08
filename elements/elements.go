@@ -128,26 +128,11 @@ func (elem *Element) SetContainer(container *Element) error {
 //slice stored within the element. Panics if the
 //component already exists within the slice.
 func (elem *Element) AddComponent(new Component) {
-	for _, existing := range elem.Components {
-		if reflect.TypeOf(new) == reflect.TypeOf(existing) {
-			//panic(fmt.Sprintf(
-			//"attempt to add new component with existing type %v",
-			//reflect.TypeOf(new)))
-			return
-		}
-	}
+	elem.RemoveComponentByType(new)
 	elem.Components = append(elem.Components, new)
 }
 
-func (elem *Element) AddComponentPostInit(new Component) {
-	elem.RemoveComponentType(new)
-	potentialReplic := elem.Components[len(elem.Components)-1]
-	temp := elem.Components[:len(elem.Components)-1]
-	elem.Components = append(temp, new)
-	elem.Components = append(elem.Components, potentialReplic)
-}
-
-func (elem *Element) RemoveComponentType(badComp Component) {
+func (elem *Element) RemoveComponentByType(badComp Component) {
 	for k, existing := range elem.Components {
 		if reflect.TypeOf(badComp) == reflect.TypeOf(existing) {
 			copy(elem.Components[k:], elem.Components[k+1:])

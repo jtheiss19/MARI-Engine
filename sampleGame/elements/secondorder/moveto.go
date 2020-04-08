@@ -71,7 +71,7 @@ func (mov *MoveTo) OnUpdateServer() error {
 
 	hypot := math.Hypot(mov.DestX-mov.container.XPos, mov.DestY-mov.container.YPos)
 	if hypot <= 10 {
-		mov.container.RemoveComponentType(mov)
+		mov.container.RemoveComponentByType(mov)
 	}
 
 	UnitX := (mov.DestX - mov.container.XPos) / hypot

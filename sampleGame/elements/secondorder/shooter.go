@@ -93,7 +93,7 @@ func (shoot *Shooter) OnUpdateServer() error {
 			myBullet.UniqueName = "BULLET" + strconv.Itoa(count)
 
 			mov := NewMoveTo(myBullet, shoot.DestX, shoot.DestY)
-			myBullet.AddComponentPostInit(mov)
+			myBullet.AddComponent(mov)
 
 			rot := math.Atan2(shoot.DestY-shoot.container.YPos, shoot.DestX-shoot.container.XPos)
 			uY, uX := math.Sincos(rot)
@@ -111,6 +111,9 @@ func (shoot *Shooter) OnUpdateServer() error {
 
 	if shoot.Cooldown > 0 {
 		shoot.Cooldown -= 1
+		if shoot.Cooldown == 0 {
+			shoot.container.Same = false
+		}
 	}
 
 	return nil
