@@ -3,10 +3,10 @@ package main
 import (
 	"net"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/objects"
-	"github.com/jtheiss19/project-undying/pkg/gamemap"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
-	"github.com/jtheiss19/project-undying/pkg/networking/server"
+	"github.com/jtheiss19/MARI-Engine/mariengine/gamestate"
+	"github.com/jtheiss19/MARI-Engine/mariengine/networking/server"
+	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/objects"
+	"github.com/jtheiss19/MARI-Engine/sampleGame/gamemap"
 )
 
 func main() {

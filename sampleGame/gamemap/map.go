@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"strconv"
 
-	"github.com/jtheiss19/project-undying/pkg/elements/objects"
-	"github.com/jtheiss19/project-undying/pkg/gamestate"
+	"github.com/jtheiss19/MARI-Engine/mariengine/gamestate"
+	"github.com/jtheiss19/MARI-Engine/sampleGame/elements/objects"
 )
 
 //NewWorld inits the elementList with elements representing
