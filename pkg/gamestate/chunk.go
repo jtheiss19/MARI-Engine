@@ -9,10 +9,6 @@ import (
 	"github.com/jtheiss19/project-undying/pkg/networking/mrp"
 )
 
-func init() {
-	CreateChunk()
-}
-
 var ObjectMap = make(map[string]*elements.Element)
 var blacklistedNames []string
 var mu sync.Mutex
