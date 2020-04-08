@@ -157,6 +157,22 @@ func (elem *Element) RemoveComponentType(badComp Component) {
 	}
 }
 
+//GetComponentByInterface grabs by interface, use the code
+//testingInterface := reflect.TypeOf((*myinterface)(nil)).Elem()
+//to prep your interface where *myinterface can be any interface
+//you want to test
+func (elem *Element) GetComponentByInterface(testingInterface reflect.Type) Component {
+	if elem != nil {
+		for _, comp := range elem.Components {
+			if reflect.TypeOf(comp).Implements(testingInterface) {
+				return comp
+			}
+		}
+	}
+
+	return nil
+}
+
 //GetComponent gets a component in the component
 //slice stored within the element by using the
 //component type of the withType component. Returns
