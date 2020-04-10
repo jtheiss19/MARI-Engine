@@ -50,7 +50,7 @@ func HandleMRP(mrpItem *mrp.MRP, conn net.Conn) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			AddElemToChunk(finalElem, 0, layerToAddOn)
+			AddElemToChunk(finalElem, layerToAddOn)
 		}
 
 	case "REPLIC":

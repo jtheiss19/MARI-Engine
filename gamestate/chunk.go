@@ -2,7 +2,6 @@ package gamestate
 
 import (
 	"encoding/json"
-	"strconv"
 	"sync"
 
 	"github.com/jtheiss19/MARI-Engine/elements"
@@ -13,60 +12,36 @@ var ObjectMap = make(map[string]*elements.Element)
 var blacklistedNames []string
 var mu sync.Mutex
 
-var chunkList []*Chunk
+var MyChunk *Chunk
 
 type Chunk struct {
 	ChunkID   string
 	ChunkData [][]*elements.Element
 }
 
-func CreateChunk() {
-	ID := strconv.Itoa(len(chunkList))
-	myNewChunk := &Chunk{ChunkID: ID}
-	myNewChunk.ChunkData = [][]*elements.Element{}
-	chunkList = append(chunkList, myNewChunk)
-}
-
 func GetEntireWorld() [][]*elements.Element {
 	var masterMap = [][]*elements.Element{}
 
-	for _, chunk := range chunkList {
-		for _, layer := range chunk.ChunkData {
-			masterMap = append(masterMap, layer)
-		}
+	for _, layer := range MyChunk.ChunkData {
+		masterMap = append(masterMap, layer)
 	}
 
 	return masterMap
 }
 
-func GetEntireChunk(chunkID int) [][]*elements.Element {
-	var masterMap = [][]*elements.Element{}
-
-	masterMap = chunkList[chunkID].ChunkData
-
-	return masterMap
-}
-
-func GetEntireChunkLayer(chunkID int, LayerID int) []*elements.Element {
+func GetEntireChunkLayer(LayerID int) []*elements.Element {
 	var masterMap = []*elements.Element{}
 
-	masterMap = chunkList[chunkID].ChunkData[LayerID]
+	masterMap = MyChunk.ChunkData[LayerID]
 
 	return masterMap
 }
 
-func AddElemToChunk(elem *elements.Element, ChunkID int, PlaneToAdd int) {
-	for {
-		if ChunkID >= len(chunkList) {
-			CreateChunk()
-		} else {
-			break
-		}
-	}
+func AddElemToChunk(elem *elements.Element, PlaneToAdd int) {
 
 	for {
-		if PlaneToAdd >= len(chunkList[ChunkID].ChunkData) {
-			chunkList[ChunkID].ChunkData = append(chunkList[ChunkID].ChunkData, []*elements.Element{})
+		if PlaneToAdd >= len(MyChunk.ChunkData) {
+			MyChunk.ChunkData = append(MyChunk.ChunkData, []*elements.Element{})
 		} else {
 			break
 		}
@@ -83,7 +58,7 @@ func AddElemToChunk(elem *elements.Element, ChunkID int, PlaneToAdd int) {
 	}
 	mu.Unlock()
 
-	for _, unitElem := range chunkList[ChunkID].ChunkData[PlaneToAdd] {
+	for _, unitElem := range MyChunk.ChunkData[PlaneToAdd] {
 		if unitElem.UniqueName == elem.UniqueName {
 			mu.Lock()
 			*unitElem = *elem
@@ -93,7 +68,7 @@ func AddElemToChunk(elem *elements.Element, ChunkID int, PlaneToAdd int) {
 	}
 
 	mu.Lock()
-	chunkList[ChunkID].ChunkData[PlaneToAdd] = append(chunkList[ChunkID].ChunkData[PlaneToAdd], elem)
+	MyChunk.ChunkData[PlaneToAdd] = append(MyChunk.ChunkData[PlaneToAdd], elem)
 	mu.Unlock()
 
 }
@@ -109,16 +84,16 @@ func RemoveElem(badElem *elements.Element) {
 
 	myMRP := mrp.NewMRP([]byte("ELEM"), bytes, []byte("NIL"))
 
-	for k, existing := range chunkList[0].ChunkData[badElem.Layer] {
+	for k, existing := range MyChunk.ChunkData[badElem.Layer] {
 		if badElem == nil || existing == nil {
 			break
 		}
 		if badElem.UniqueName == existing.UniqueName {
-			if k < len(chunkList[0].ChunkData[badElem.Layer]) {
-				copy(chunkList[0].ChunkData[badElem.Layer][k:], chunkList[0].ChunkData[badElem.Layer][k+1:])
+			if k < len(MyChunk.ChunkData[badElem.Layer]) {
+				copy(MyChunk.ChunkData[badElem.Layer][k:], MyChunk.ChunkData[badElem.Layer][k+1:])
 			}
-			chunkList[0].ChunkData[badElem.Layer][len(chunkList[0].ChunkData[badElem.Layer])-1] = nil
-			chunkList[0].ChunkData[badElem.Layer] = chunkList[0].ChunkData[badElem.Layer][:len(chunkList[0].ChunkData[badElem.Layer])-1]
+			MyChunk.ChunkData[badElem.Layer][len(MyChunk.ChunkData[badElem.Layer])-1] = nil
+			MyChunk.ChunkData[badElem.Layer] = MyChunk.ChunkData[badElem.Layer][:len(MyChunk.ChunkData[badElem.Layer])-1]
 		}
 	}
 

@@ -102,7 +102,7 @@ func (shoot *Shooter) OnUpdateServer() error {
 			myBullet.XPos = shoot.container.XPos + uX*70
 			myBullet.YPos = shoot.container.YPos + uY*70
 
-			gamestate.AddElemToChunk(myBullet, 0, 3)
+			gamestate.AddElemToChunk(myBullet, 3)
 
 			shoot.container.Same = false
 		}

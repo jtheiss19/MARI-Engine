@@ -26,7 +26,7 @@ func main() {
 		newPlayer := objects.NewPlayer(nil)
 		newPlayer.ID = "0"
 		newPlayer.UniqueName = newPlayer.UniqueName + newPlayer.ID
-		gamestate.AddElemToChunk(newPlayer, 0, 0)
+		gamestate.AddElemToChunk(newPlayer, 0)
 	} else {
 		gamestate.SetMultiplayerAddress(addr)
 	}
